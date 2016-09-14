@@ -12,6 +12,10 @@
 		898697F01D88F17E006EBFF1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 898697EE1D88F17E006EBFF1 /* Main.storyboard */; };
 		898697F21D88F17E006EBFF1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 898697F11D88F17E006EBFF1 /* Assets.xcassets */; };
 		898697F51D88F17E006EBFF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 898697F31D88F17E006EBFF1 /* LaunchScreen.storyboard */; };
+		898697FD1D88F38C006EBFF1 /* recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898697FC1D88F38C006EBFF1 /* recipe.swift */; };
+		898697FF1D88F517006EBFF1 /* homeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898697FE1D88F517006EBFF1 /* homeTableViewController.swift */; };
+		898698011D88F97E006EBFF1 /* selectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898698001D88F97E006EBFF1 /* selectorViewController.swift */; };
+		898698031D8908E4006EBFF1 /* homeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898698021D8908E4006EBFF1 /* homeViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +26,10 @@
 		898697F11D88F17E006EBFF1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		898697F41D88F17E006EBFF1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		898697F61D88F17E006EBFF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		898697FC1D88F38C006EBFF1 /* recipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = recipe.swift; sourceTree = "<group>"; };
+		898697FE1D88F517006EBFF1 /* homeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = homeTableViewController.swift; sourceTree = "<group>"; };
+		898698001D88F97E006EBFF1 /* selectorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = selectorViewController.swift; sourceTree = "<group>"; };
+		898698021D8908E4006EBFF1 /* homeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = homeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +65,10 @@
 				898697EA1D88F17E006EBFF1 /* AppDelegate.swift */,
 				898697EC1D88F17E006EBFF1 /* ViewController.swift */,
 				898697EE1D88F17E006EBFF1 /* Main.storyboard */,
+				898698021D8908E4006EBFF1 /* homeViewController.swift */,
+				898698001D88F97E006EBFF1 /* selectorViewController.swift */,
+				898697FE1D88F517006EBFF1 /* homeTableViewController.swift */,
+				898697FC1D88F38C006EBFF1 /* recipe.swift */,
 				898697F11D88F17E006EBFF1 /* Assets.xcassets */,
 				898697F31D88F17E006EBFF1 /* LaunchScreen.storyboard */,
 				898697F61D88F17E006EBFF1 /* Info.plist */,
@@ -135,7 +147,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				898697FF1D88F517006EBFF1 /* homeTableViewController.swift in Sources */,
+				898698031D8908E4006EBFF1 /* homeViewController.swift in Sources */,
 				898697ED1D88F17E006EBFF1 /* ViewController.swift in Sources */,
+				898698011D88F97E006EBFF1 /* selectorViewController.swift in Sources */,
+				898697FD1D88F38C006EBFF1 /* recipe.swift in Sources */,
 				898697EB1D88F17E006EBFF1 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
