@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AWSDynamoDB
 
 class homeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -16,15 +17,46 @@ class homeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     var recies = [recipe]()
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        recies.append(recipe(title: "pizza", temp: "300F", instructions: "step 1: bake pizza, step 2: eat pizza"))
-        recies.append(recipe(title: "pasta", temp: "1200F", instructions: "step 1: bake pasta, step 2: eat pasta"))
-        recies.append(recipe(title: "koshary", temp: "90F", instructions: "step 1: bake koshary, step 2: eat koshary"))
+        //recies.append(recipe(title: "pizza", temp: "300F", instructions: "step 1: bake pizza, step 2: eat pizza"))
+        //recies.append(recipe(title: "pasta", temp: "1200F", instructions: "step 1: bake pasta, step 2: eat pasta"))
+        //recies.append(recipe(title: "koshary", temp: "90F", instructions: "step 1: bake koshary, step 2: eat koshary"))
         
         recipeTableView.delegate = self
         recipeTableView.dataSource = self
         // Do any additional setup after loading the view.
+        
+        let dynamoDBObjectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+        let queryExpression = AWSDynamoDBScanExpression()
+        queryExpression.limit = 100;
+        dynamoDBObjectMapper.scan(recipe.self, expression: queryExpression).continueWithBlock({ (task:AWSTask!) -> AnyObject! in
+            
+            print("task result is \(task.result)")
+            if task.result != nil {
+                
+                let paginatedOutput = task.result as! AWSDynamoDBPaginatedOutput
+                
+                for item in paginatedOutput.items as! [recipe] {
+                    //NSLog(item.M!.stringValue)
+                    self.recies.append(item)
+                    self.recipeTableView.reloadData()
+                    print("self.recies.count: \(self.recies.count)")
+                }
+                
+                if ((task.error) != nil) {
+                    print("Error: \(task.error)")
+                }
+                return nil
+                
+            }
+            
+            
+            return nil
+        })
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -48,8 +80,8 @@ class homeViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("recipeCell", forIndexPath: indexPath)
         
-        cell.textLabel?.text = recies[indexPath.row].title
-        cell.detailTextLabel?.text = recies[indexPath.row].instructions
+        cell.textLabel?.text = recies[indexPath.row]._name
+        cell.detailTextLabel?.text = recies[indexPath.row]._description
         
         return cell
     }
