@@ -28,6 +28,11 @@ class homeViewController: UIViewController, UITableViewDelegate, UITableViewData
         recipeTableView.dataSource = self
         // Do any additional setup after loading the view.
         
+        
+        queryRecipeData()
+    }
+    func queryRecipeData(){
+        self.recies.removeAll()
         let dynamoDBObjectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         let queryExpression = AWSDynamoDBScanExpression()
         queryExpression.limit = 100;
@@ -55,8 +60,6 @@ class homeViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             return nil
         })
-        
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -84,6 +87,10 @@ class homeViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.detailTextLabel?.text = recies[indexPath.row]._description
         
         return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        queryRecipeData()
     }
 
     

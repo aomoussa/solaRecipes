@@ -108,7 +108,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="79" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Mkb-uX-sfi">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="1000"/>
+                                <rect key="frame" x="0.0" y="50" width="600" height="900"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="titleCell" rowHeight="79" id="Mj9-uC-6Ma" customClass="recipeTitleTableViewCell" customModule="solaRecipes" customModuleProvider="target">
@@ -152,8 +152,17 @@
                                                         <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                     </collectionViewFlowLayout>
                                                     <cells>
-                                                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="LNR-1r-xFK">
+                                                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="pictureCell" id="LNR-1r-xFK">
                                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                            </view>
+                                                        </collectionViewCell>
+                                                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="n8s-IG-3bv">
+                                                            <rect key="frame" x="61" y="0.0" width="50" height="50"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -244,7 +253,7 @@
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Mkb-uX-sfi" firstAttribute="height" secondItem="i4b-Et-o3N" secondAttribute="height" id="27u-p9-xVY"/>
+                            <constraint firstItem="Mkb-uX-sfi" firstAttribute="height" secondItem="i4b-Et-o3N" secondAttribute="height" multiplier="0.9" id="27u-p9-xVY"/>
                             <constraint firstItem="Mkb-uX-sfi" firstAttribute="centerY" secondItem="i4b-Et-o3N" secondAttribute="centerY" id="Pa8-sQ-wnn"/>
                             <constraint firstItem="Mkb-uX-sfi" firstAttribute="centerX" secondItem="i4b-Et-o3N" secondAttribute="centerX" id="Rjs-nR-VKH"/>
                             <constraint firstItem="Mkb-uX-sfi" firstAttribute="width" secondItem="i4b-Et-o3N" secondAttribute="width" id="s6M-Iu-Yic"/>
