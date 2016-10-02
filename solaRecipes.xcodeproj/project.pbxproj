@@ -18,6 +18,8 @@
 		898697FD1D88F38C006EBFF1 /* recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898697FC1D88F38C006EBFF1 /* recipe.swift */; };
 		898698011D88F97E006EBFF1 /* selectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898698001D88F97E006EBFF1 /* selectorViewController.swift */; };
 		898698031D8908E4006EBFF1 /* homeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898698021D8908E4006EBFF1 /* homeViewController.swift */; };
+		89AB835A1DA1919A00902824 /* oven.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB83591DA1919A00902824 /* oven.swift */; };
+		89B5AE451DA0888F006953E1 /* fileTransferHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B5AE441DA0888E006953E1 /* fileTransferHandler.swift */; };
 		89DCCD311D8C761800CC2590 /* Sdk in Resources */ = {isa = PBXBuildFile; fileRef = 89DCCD301D8C761800CC2590 /* Sdk */; };
 		89DCCD331D8C764600CC2590 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DCCD321D8C764600CC2590 /* AWSCore.framework */; };
 		89DCCD341D8C764600CC2590 /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 89DCCD321D8C764600CC2590 /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -64,6 +66,8 @@
 		898697FC1D88F38C006EBFF1 /* recipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = recipe.swift; sourceTree = "<group>"; };
 		898698001D88F97E006EBFF1 /* selectorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = selectorViewController.swift; sourceTree = "<group>"; };
 		898698021D8908E4006EBFF1 /* homeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = homeViewController.swift; sourceTree = "<group>"; };
+		89AB83591DA1919A00902824 /* oven.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = oven.swift; sourceTree = "<group>"; };
+		89B5AE441DA0888E006953E1 /* fileTransferHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = fileTransferHandler.swift; sourceTree = "<group>"; };
 		89DCCD301D8C761800CC2590 /* Sdk */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Sdk; path = solaRecipes/Sdk; sourceTree = "<group>"; };
 		89DCCD321D8C764600CC2590 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = solaRecipes/Sdk/Aws/AWSCore.framework; sourceTree = "<group>"; };
 		89DCCD361D8C766000CC2590 /* AWSDynamoDB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSDynamoDB.framework; path = solaRecipes/Sdk/Aws/AWSDynamoDB.framework; sourceTree = "<group>"; };
@@ -146,6 +150,8 @@
 				898698021D8908E4006EBFF1 /* homeViewController.swift */,
 				898698001D88F97E006EBFF1 /* selectorViewController.swift */,
 				898697FC1D88F38C006EBFF1 /* recipe.swift */,
+				89AB83591DA1919A00902824 /* oven.swift */,
+				89B5AE441DA0888E006953E1 /* fileTransferHandler.swift */,
 				898697F11D88F17E006EBFF1 /* Assets.xcassets */,
 				898697F31D88F17E006EBFF1 /* LaunchScreen.storyboard */,
 				898697F61D88F17E006EBFF1 /* Info.plist */,
@@ -214,6 +220,7 @@
 				TargetAttributes = {
 					898697E61D88F17D006EBFF1 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -270,8 +277,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89B5AE451DA0888F006953E1 /* fileTransferHandler.swift in Sources */,
 				8957802B1D976B2300D1FD75 /* recipeTitleTableViewCell.swift in Sources */,
 				89DCCD471D8C773E00CC2590 /* Users.swift in Sources */,
+				89AB835A1DA1919A00902824 /* oven.swift in Sources */,
 				898698031D8908E4006EBFF1 /* homeViewController.swift in Sources */,
 				895780311D982BFC00D1FD75 /* recipeTextInforTableViewCell.swift in Sources */,
 				89DCCD441D8C773E00CC2590 /* AWSMobileClient.swift in Sources */,
@@ -403,6 +412,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anagamedfash5.solaRecipes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -419,6 +429,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anagamedfash5.solaRecipes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

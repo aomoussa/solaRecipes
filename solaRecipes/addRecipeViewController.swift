@@ -12,6 +12,7 @@ import AWSMobileHubHelper
 
 class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource {
 
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
     var titleTextView = UITextView()
     var descriptionTextView = UITextView()
     var instructionsTextView = UITextView()
@@ -19,14 +20,29 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
     
     @IBOutlet weak var recipeDataTableView: UITableView!
     
-    @IBAction func addPictureButtonClicked(sender: AnyObject) {
+    @IBAction func addPictureButtonClicked(_ sender: AnyObject) {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
-        imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
-        self.presentViewController(imagePicker, animated: true, completion: nil)
+        imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        self.present(imagePicker, animated: true, completion: nil)
     }
     
-    
+    @IBAction func segmedChanged(_ sender: UISegmentedControl) {
+        switch(getSegmentedControlState(sc: sender)){
+        case "ovens":
+            break
+        default:
+            break
+        }
+    }
+    func getSegmentedControlState(sc: UISegmentedControl) -> String{
+        switch(sc.selectedSegmentIndex){
+        case 1:
+            return "ovens"
+        default:
+            return "recipes"
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -42,41 +58,41 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
     }
     
 
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         //addPictureButton.setBackgroundImage(image, forState: UIControlState.Normal)
         pictures.append(image)
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
         recipeDataTableView.reloadData()// (, withRowAnimation: UITableViewRowAnimation.Automatic)
     }
     //----------------------------- COLLECTIONVIEW CODE -------------------------------- starts
 
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return pictures.count + 1
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let screenHeight = self.view.frame.height
         let cellHeight =  screenHeight/3
         let screenWidth = self.view.frame.width
         
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("pictureCell", forIndexPath: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pictureCell", for: indexPath)
         let pictureView = UIImageView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: cellHeight*0.9))
-        if(indexPath.row == 0){
+        if((indexPath as NSIndexPath).row == 0){
             pictureView.image = UIImage(named: "plus.jpg")
         }
         else{
-            pictureView.image = pictures[indexPath.row - 1]
+            pictureView.image = pictures[(indexPath as NSIndexPath).row - 1]
         }
         cell.addSubview(pictureView)
         
         return cell
     }
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if(indexPath.row == 0){
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if((indexPath as NSIndexPath).row == 0){
             let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
-            imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+            imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+            self.present(imagePicker, animated: true, completion: nil)
         }
     }
     
@@ -85,16 +101,16 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
     
     //----------------------------- TABLEVIEW CODE -------------------------------- starts
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 5
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        switch(indexPath.row){
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch((indexPath as NSIndexPath).row){
         case 0:
             //let cell = tableView.dequeueReusableCellWithIdentifier("titleCell") as! recipeTitleTableViewCell
             //cell.backgroundColor = UIColor.blueColor()
@@ -112,12 +128,12 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         default:
             let cell = UITableViewCell()
             cell.textLabel?.text = "submit"
-            cell.backgroundColor = UIColor.blueColor()
+            cell.backgroundColor = UIColor.blue
             return cell
         }
     }
     func makePicturesCollectionCell() -> UITableViewCell{
-        let cell = recipeDataTableView.dequeueReusableCellWithIdentifier("picturesCollectionCell") as! recipePicturesCollectionTableViewCell
+        let cell = recipeDataTableView.dequeueReusableCell(withIdentifier: "picturesCollectionCell") as! recipePicturesCollectionTableViewCell
         let screenHeight = self.view.frame.height
         let cellHeight =  screenHeight/3
         let screenWidth = self.view.frame.width
@@ -126,12 +142,12 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         cell.picturesCollectionView.dataSource = self
         
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSizeMake(screenWidth/4, screenWidth/4)
+        layout.itemSize = CGSize(width: screenWidth/4, height: screenWidth/4)
         cell.picturesCollectionView.collectionViewLayout = layout
         
         return cell
     }
-    func makeTitleInputCell(type: String) -> UITableViewCell{
+    func makeTitleInputCell(_ type: String) -> UITableViewCell{
         let screenHeight = self.view.frame.height
         var cellHeight =  screenHeight/8
         let screenWidth = self.view.frame.width
@@ -139,7 +155,7 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         let typeLabel = UILabel()
         let someTextView = UITextView()
         someTextView.text = "ahmed gamed fash5"
-        someTextView.backgroundColor = UIColor.purpleColor()
+        someTextView.backgroundColor = UIColor.purple
         switch(type){
         case "Title":
             cellHeight =  screenHeight/8
@@ -167,12 +183,12 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         typeLabel.text = "\(type): "
         cell.addSubview(typeLabel)
         
-        cell.backgroundColor = UIColor.blueColor()
+        cell.backgroundColor = UIColor.blue
         return cell
     }
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let screenHeight = self.view.frame.height
-        switch(indexPath.row){
+        switch((indexPath as NSIndexPath).row){
         case 0:
             return screenHeight/8
         case 1:
@@ -185,37 +201,79 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
             return screenHeight/8
         }
     }
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if(indexPath.row == 4){
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if((indexPath as NSIndexPath).row == 4){
             print("submit recipe clicked")
-            let newRecipe = recipe()
-            newRecipe._name = titleTextView.text
-            newRecipe._description = descriptionTextView.text
-            newRecipe._temperature = "100"
-            newRecipe._userId = AWSIdentityManager.defaultIdentityManager().identityId!
-            print(titleTextView.text)
             
+            switch(getSegmentedControlState(sc: segmentedControl)){
+            case "ovens":
+                makeAndSubmitOven()
+                break
+            default:
+                makeAndSubmitRecipe()
+                break
+            }
             //insertData(newRecipe)
-            self.uploadRecipe(newRecipe).continueWithBlock({
-                (task: AWSTask!) -> AWSTask! in
-                
-                if (task.error != nil) {
-                    NSLog(task.error!.description)
-                } else {
-                    NSLog("DynamoDB save succeeded")
-                }
-                return nil
-            })
+            uploadPictures(pictures)
+            
         }
     }
-    func uploadRecipe(recie: recipe) -> AWSTask! {
-        let mapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+    func uploadPictures(_ pictures: [UIImage]){
+        if(pictures.count > 0){
+            glblFileTransferHandler.upload("randomNameForNow.jpg", picture: pictures[0])
+        }
+    }
+    func makeAndSubmitOven(){
+        let newOven = oven()
+        newOven?._id = "someID2"
+        newOven?._name = titleTextView.text
+        newOven?._description = descriptionTextView.text
+        newOven?._instructions = instructionsTextView.text
+        
+        
+        self.uploadOven(newOven!).continue({
+            (task: AWSTask!) -> AWSTask<AnyObject>! in
+            
+            if (task.error != nil) {
+                print(task.error)
+            } else {
+                NSLog("DynamoDB save succeeded")
+            }
+            return nil
+        })
+        
+    }
+    func makeAndSubmitRecipe(){
+        let newRecipe = recipe()
+        newRecipe?._name = titleTextView.text
+        newRecipe?._description = descriptionTextView.text
+        newRecipe?._temperature = "100"
+        newRecipe?._userId = AWSIdentityManager.default().identityId!
+        print(titleTextView.text)
+        self.uploadRecipe(newRecipe!).continue({
+            (task: AWSTask!) -> AWSTask<AnyObject>! in
+            
+            if (task.error != nil) {
+                print(task.error)
+            } else {
+                NSLog("DynamoDB save succeeded")
+            }
+            return nil
+        })
+    }
+    func uploadOven(_ ovn: oven) -> AWSTask<AnyObject>! {
+        let mapper = AWSDynamoDBObjectMapper.default()
+        let task = mapper.save(ovn)
+        return(AWSTask(forCompletionOfAllTasks: [task]))
+    }
+    func uploadRecipe(_ recie: recipe) -> AWSTask<AnyObject>! {
+        let mapper = AWSDynamoDBObjectMapper.default()
         let task = mapper.save(recie)
         return(AWSTask(forCompletionOfAllTasks: [task]))
     }
-    func insertData(recie: recipe){
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        objectMapper.save(recie, completionHandler: {(error: NSError?) -> Void in
+    func insertData(_ recie: recipe){
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.save(recie, completionHandler: {(error: Error?) -> Void in
             if let error = error {
                 print("Amazon DynamoDB Save Error: \(error)")
                 return

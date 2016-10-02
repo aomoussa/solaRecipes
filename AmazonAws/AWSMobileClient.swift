@@ -22,9 +22,9 @@ class AWSMobileClient: NSObject {
     
     // Shared instance of this class
     static let sharedInstance = AWSMobileClient()
-    private var isInitialized: Bool
+    fileprivate var isInitialized: Bool
     
-    private override init() {
+    fileprivate override init() {
         isInitialized = false
         super.init()
     }
@@ -44,9 +44,9 @@ class AWSMobileClient: NSObject {
      * - parameter annotation: from application delegate.
      * - returns: true if call was handled by this component
      */
-    func withApplication(application: UIApplication, withURL url: NSURL, withSourceApplication sourceApplication: String?, withAnnotation annotation: AnyObject) -> Bool {
+    func withApplication(_ application: UIApplication, withURL url: URL, withSourceApplication sourceApplication: String?, withAnnotation annotation: AnyObject) -> Bool {
         print("withApplication:withURL")
-        AWSIdentityManager.defaultIdentityManager().interceptApplication(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
+        AWSIdentityManager.default().interceptApplication(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
         
         if (!isInitialized) {
             isInitialized = true
@@ -61,7 +61,7 @@ class AWSMobileClient: NSObject {
      *
      * - parameter application: from application delegate.
      */
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
         print("applicationDidBecomeActive:")
     }
     
@@ -72,15 +72,15 @@ class AWSMobileClient: NSObject {
     * - parameter application: instance from application delegate.
     * - parameter launchOptions: from application delegate.
     */
-    func didFinishLaunching(application: UIApplication, withOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
+    func didFinishLaunching(_ application: UIApplication, withOptions launchOptions: [AnyHashable: Any]?) -> Bool {
         print("didFinishLaunching:")
 
-        let didFinishLaunching: Bool = AWSIdentityManager.defaultIdentityManager().interceptApplication(application, didFinishLaunchingWithOptions: launchOptions)
+        let didFinishLaunching: Bool = AWSIdentityManager.default().interceptApplication(application, didFinishLaunchingWithOptions: launchOptions)
 
         if (!isInitialized) {
-            AWSIdentityManager.defaultIdentityManager().resumeSessionWithCompletionHandler({(result: AnyObject?, error: NSError?) -> Void in
+            AWSIdentityManager.default().resumeSession(completionHandler: {(result: Any?, error: Error?) -> Void in
                 print("Result: \(result) \n Error:\(error)")
-            })
+            } as! (Any?, Error?) -> Void)
             isInitialized = true
         }
 
