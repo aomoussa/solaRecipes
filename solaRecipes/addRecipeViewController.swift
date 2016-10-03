@@ -225,10 +225,11 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
     }
     func makeAndSubmitOven(){
         let newOven = oven()
-        newOven?._id = "someID2"
+        newOven?._id = "3"
         newOven?._name = titleTextView.text
         newOven?._description = descriptionTextView.text
         newOven?._instructions = instructionsTextView.text
+        newOven?._userID = "1"
         
         
         self.uploadOven(newOven!).continue({
@@ -245,10 +246,14 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
     }
     func makeAndSubmitRecipe(){
         let newRecipe = recipe()
+        newRecipe?._id = "1"
         newRecipe?._name = titleTextView.text
+        newRecipe?._instructions = instructionsTextView.text
         newRecipe?._description = descriptionTextView.text
         newRecipe?._temperature = "100"
-        newRecipe?._userId = AWSIdentityManager.default().identityId!
+        newRecipe?._duration = "60"
+        newRecipe?._userID = AWSIdentityManager.default().identityId!
+        
         print(titleTextView.text)
         self.uploadRecipe(newRecipe!).continue({
             (task: AWSTask!) -> AWSTask<AnyObject>! in

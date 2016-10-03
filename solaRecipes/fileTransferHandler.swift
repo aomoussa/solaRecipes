@@ -11,7 +11,7 @@ import AWSS3
 import AWSMobileHubHelper
 
 class fileTransferHandler{
-    let S3BucketName = "solarovenrecipes-userfiles-mobilehub-1674615168"
+    let S3BucketName = "solarrecipes-userfiles-mobilehub-623139932"
     
     init(){
         
@@ -68,7 +68,7 @@ class fileTransferHandler{
         
         let credentialsProvider = AWSCognitoCredentialsProvider(
             regionType: .usEast1,
-            identityPoolId: "us-east-1:ecc8eec3-074c-4642-b0f4-1be804593212")
+            identityPoolId: "us-east-1:0f8aff81-0c9c-41f4-bd2a-e9083e706388")
         let configuration = AWSServiceConfiguration(
             region: .usEast1,
             credentialsProvider: credentialsProvider)

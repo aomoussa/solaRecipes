@@ -57,7 +57,7 @@
 				<key>Default</key>
 				<dict>
 					<key>PoolId</key>
-					<string>us-east-1:ecc8eec3-074c-4642-b0f4-1be804593212</string>
+					<string>us-east-1:0f8aff81-0c9c-41f4-bd2a-e9083e706388</string>
 					<key>Region</key>
 					<string>us-east-1</string>
 				</dict>
@@ -66,7 +66,7 @@
 		<key>MobileHub</key>
 		<dict>
 			<key>ProjectClientId</key>
-			<string>MobileHub 2aedfcd1-f9a9-4a84-b792-0f5847706da6 aws-my-sample-app-ios-swift-v0.3</string>
+			<string>MobileHub 265c0248-1255-45b4-8da0-fd6fe01c701b aws-my-sample-app-ios-swift-v0.4</string>
 		</dict>
 		<key>DynamoDBObjectMapper</key>
 		<dict>
@@ -81,7 +81,7 @@
 			<key>Default</key>
 			<dict>
 				<key>S3Bucket</key>
-				<string>solarovenrecipes-userfiles-mobilehub-1674615168</string>
+				<string>solarrecipes-userfiles-mobilehub-623139932</string>
 				<key>Region</key>
 				<string>us-east-1</string>
 			</dict>

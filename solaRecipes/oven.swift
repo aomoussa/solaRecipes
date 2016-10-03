@@ -13,30 +13,33 @@ import AWSDynamoDB
 class oven: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _id: String?
-    var _description: String?
     var _name: String?
+    var _description: String?
     var _instructions: String?
+    var _userID: String?
     
     class func dynamoDBTableName() -> String {
         
-        return "solarovenrecipes-mobilehub-1674615168-Ovens"
+        return "solarrecipes-mobilehub-623139932-Oven"
     }
     
     class func hashKeyAttribute() -> String {
         
         return "_id"
     }
+    
     class func rangeKeyAttribute() -> String {
         
         return "_name"
     }
+    
     override class func jsonKeyPathsByPropertyKey() -> [AnyHashable: Any] {
         return [
             "_id" : "id",
-            "_description" : "description",
             "_name" : "name",
+            "_description" : "description",
             "_instructions" : "instructions",
+            "_userID" : "userID",
         ]
     }
 }
-

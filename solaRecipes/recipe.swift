@@ -24,27 +24,39 @@ import AWSDynamoDB
 
 class recipe: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
-    var _userId: String?
-    var _description: String?
+    var _id: String?
     var _name: String?
+    var _description: String?
+    var _duration: String?
+    var _instructions: String?
     var _temperature: String?
+    var _userID: String?
     
     class func dynamoDBTableName() -> String {
         
-        return "solarovenrecipes-mobilehub-1674615168-Recipes"
+        return "solarrecipes-mobilehub-623139932-Recipe"
     }
     
     class func hashKeyAttribute() -> String {
         
-        return "_userId"
+        return "_id"
+    }
+    
+    class func rangeKeyAttribute() -> String {
+        
+        return "_name"
     }
     
     override class func jsonKeyPathsByPropertyKey() -> [AnyHashable: Any] {
         return [
-            "_userId" : "userId",
-            "_description" : "description",
+            "_id" : "id",
             "_name" : "name",
+            "_description" : "description",
+            "_duration" : "duration",
+            "_instructions" : "instructions",
             "_temperature" : "temperature",
+            "_userID" : "userID",
         ]
     }
 }
+
