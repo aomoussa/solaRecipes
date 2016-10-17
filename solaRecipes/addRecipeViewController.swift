@@ -10,13 +10,17 @@ import UIKit
 import AWSDynamoDB
 import AWSMobileHubHelper
 
-class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource {
-
+class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextViewDelegate {
+    
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     var titleTextView = UITextView()
     var descriptionTextView = UITextView()
     var instructionsTextView = UITextView()
+    var titleString = "enter title here"
+    var descString = "enter description here"
+    var instString = "enter instructions here"
     var pictures = [UIImage]()
+    var uploadProgresses = [Float]()
     
     @IBOutlet weak var recipeDataTableView: UITableView!
     
@@ -36,6 +40,7 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         }
     }
     func getSegmentedControlState(sc: UISegmentedControl) -> String{
+        print("sc.selectedSegmentIndex: \(sc.selectedSegmentIndex)")
         switch(sc.selectedSegmentIndex){
         case 1:
             return "ovens"
@@ -48,24 +53,26 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         
         recipeDataTableView.delegate = self
         recipeDataTableView.dataSource = self
-        
         // Do any additional setup after loading the view.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         //addPictureButton.setBackgroundImage(image, forState: UIControlState.Normal)
         pictures.append(image)
+        uploadProgresses.append(0.0)
         self.dismiss(animated: true, completion: nil)
-        recipeDataTableView.reloadData()// (, withRowAnimation: UITableViewRowAnimation.Automatic)
+        let ind = IndexPath(row: 1, section: 0)
+        recipeDataTableView.reloadRows(at: [ind], with: UITableViewRowAnimation.automatic)
+        //recipeDataTableView.reloadData()// (, withRowAnimation: UITableViewRowAnimation.Automatic)
     }
     //----------------------------- COLLECTIONVIEW CODE -------------------------------- starts
-
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return pictures.count + 1
     }
@@ -76,13 +83,14 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         let screenWidth = self.view.frame.width
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pictureCell", for: indexPath)
-        let pictureView = UIImageView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: cellHeight*0.9))
+        let pictureView = UIImageView(frame: CGRect(x: 0, y: 0, width: cellHeight*0.9, height: cellHeight*0.9))
         if((indexPath as NSIndexPath).row == 0){
             pictureView.image = UIImage(named: "plus.jpg")
         }
         else{
             pictureView.image = pictures[(indexPath as NSIndexPath).row - 1]
         }
+        pictureView.contentMode = UIViewContentMode.scaleAspectFill
         cell.addSubview(pictureView)
         
         return cell
@@ -96,8 +104,34 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let screenHeight = self.view.frame.height
+        let cellHeight =  (screenHeight/3)*0.9
+        return CGSize(width: cellHeight, height: cellHeight)
+    }
+    
     //----------------------------- COLLECTIONVIEW CODE -------------------------------- ends
-
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.endOfDocument)
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        switch(textView){
+        case titleTextView:
+            titleString = titleTextView.text
+            break
+        case descriptionTextView:
+            descString = descriptionTextView.text
+            break
+        case instructionsTextView:
+            instString = instructionsTextView.text
+            break
+        default:
+            titleString = titleTextView.text
+            break
+        }
+        view.endEditing(true)
+    }
     
     //----------------------------- TABLEVIEW CODE -------------------------------- starts
     
@@ -108,7 +142,7 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 5
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch((indexPath as NSIndexPath).row){
         case 0:
@@ -142,7 +176,9 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         cell.picturesCollectionView.dataSource = self
         
         let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: screenWidth/4, height: screenWidth/4)
+        
         cell.picturesCollectionView.collectionViewLayout = layout
         
         return cell
@@ -154,25 +190,33 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         let cell = UITableViewCell()
         let typeLabel = UILabel()
         let someTextView = UITextView()
-        someTextView.text = "ahmed gamed fash5"
+        
+        titleTextView.delegate = self
+        descriptionTextView.delegate = self
+        instructionsTextView.delegate = self
+        
         someTextView.backgroundColor = UIColor.purple
         switch(type){
         case "Title":
             cellHeight =  screenHeight/8
             someTextView.frame = CGRect(x: screenWidth/3, y: cellHeight*0.1, width: screenWidth*0.66, height: cellHeight*0.8)
             self.titleTextView = someTextView
+            self.titleTextView.text = titleString
+            self.titleTextView.selectedTextRange = self.titleTextView.textRange(from: self.titleTextView.beginningOfDocument, to: self.titleTextView.endOfDocument)
             cell.addSubview(titleTextView)
             break
         case "Description":
             cellHeight =  screenHeight/5
             someTextView.frame = CGRect(x: screenWidth/3, y: cellHeight*0.1, width: screenWidth*0.66, height: cellHeight*0.8)
             self.descriptionTextView = someTextView
+            self.descriptionTextView.text = descString
             cell.addSubview(descriptionTextView)
             break
         case "Instructions":
             cellHeight =  screenHeight/3
             someTextView.frame = CGRect(x: screenWidth/3, y: cellHeight*0.1, width: screenWidth*0.66, height: cellHeight*0.8)
             self.instructionsTextView = someTextView
+            self.instructionsTextView.text = instString
             cell.addSubview(instructionsTextView)
             break
         default:
@@ -202,6 +246,7 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         }
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        view.endEditing(true)
         if((indexPath as NSIndexPath).row == 4){
             print("submit recipe clicked")
             
@@ -214,13 +259,15 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
                 break
             }
             //insertData(newRecipe)
-            uploadPictures(pictures)
             
         }
     }
-    func uploadPictures(_ pictures: [UIImage]){
-        if(pictures.count > 0){
-            glblFileTransferHandler.upload("randomNameForNow.jpg", picture: pictures[0])
+    func uploadPictures(_ pictures: [UIImage], folderName: String){
+        var i = 1
+        for pic in pictures{
+            let picName = "\(folderName)/ picture\(i)"
+            uploadPicture(picName, picture: pic, i:i)
+            i = i + 1
         }
     }
     func makeAndSubmitOven(){
@@ -245,23 +292,28 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         
     }
     func makeAndSubmitRecipe(){
-        let newRecipe = recipe()
-        newRecipe?._id = "1"
-        newRecipe?._name = titleTextView.text
-        newRecipe?._instructions = instructionsTextView.text
-        newRecipe?._description = descriptionTextView.text
-        newRecipe?._temperature = "100"
-        newRecipe?._duration = "60"
-        newRecipe?._userID = AWSIdentityManager.default().identityId!
+        
+        let id = "2"
+        let name = titleTextView.text
+        let instructions = instructionsTextView.text
+        let description = descriptionTextView.text
+        let temperature = "100"
+        let duration = "60"
+        let userID = AWSIdentityManager.default().identityId!
+        let numberOfPictures = pictures.count
+        
+        let newRecipe = recipe(id: id, name: name!, insts: instructions!, desc: description!, temp: temperature, dur: duration, userID: userID, numOfPics: numberOfPictures)
         
         print(titleTextView.text)
-        self.uploadRecipe(newRecipe!).continue({
+        self.uploadRecipe(newRecipe.recie!).continue({
             (task: AWSTask!) -> AWSTask<AnyObject>! in
             
             if (task.error != nil) {
                 print(task.error)
             } else {
                 NSLog("DynamoDB save succeeded")
+                
+                self.uploadPictures(self.pictures, folderName: (newRecipe.recie?._name)!)
             }
             return nil
         })
@@ -271,12 +323,12 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         let task = mapper.save(ovn)
         return(AWSTask(forCompletionOfAllTasks: [task]))
     }
-    func uploadRecipe(_ recie: recipe) -> AWSTask<AnyObject>! {
+    func uploadRecipe(_ recie: DBRecipe) -> AWSTask<AnyObject>! {
         let mapper = AWSDynamoDBObjectMapper.default()
         let task = mapper.save(recie)
         return(AWSTask(forCompletionOfAllTasks: [task]))
     }
-    func insertData(_ recie: recipe){
+    func insertData(_ recie: DBRecipe){
         let objectMapper = AWSDynamoDBObjectMapper.default()
         objectMapper.save(recie, completionHandler: {(error: Error?) -> Void in
             if let error = error {
@@ -286,4 +338,55 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
             print("Item saved.")
         })
     }
+    //----------- --------------- -------------- ---------- UPLOAD FILES ------------- ----------- ------------- //begins
+    func uploadWithData(_ data: Data, forKey key: String, i: Int) {
+        
+        let S3Bucket = "solarrecipes-userfiles-mobilehub-623139932"
+        let credentialProvider = AWSCognitoCredentialsProvider(regionType: .usEast1, identityPoolId: "us-east-1:0f8aff81-0c9c-41f4-bd2a-e9083e706388")
+        let configuration = AWSServiceConfiguration(region: .usEast1, credentialsProvider: credentialProvider)
+        let userFileManagerConfiguration = AWSUserFileManagerConfiguration(bucketName: S3Bucket, serviceConfiguration: configuration)
+        
+        AWSUserFileManager.register(with: userFileManagerConfiguration, forKey: "randomManagerIJustCreated")
+        
+        let manager = AWSUserFileManager.UserFileManager(forKey: "randomManagerIJustCreated")
+        let localContent = manager.localContent(with: data, key: key)
+        print("about to upload picture rn ")
+        localContent.uploadWithPin(
+            onCompletion: false,
+            progressBlock: {[weak self](content: AWSLocalContent?, progress: Progress?) -> Void in
+                guard let strongSelf = self else { return }
+                /* Show progress in UI. */
+                DispatchQueue.main.async(execute: { () -> Void in
+                    print("not sure when this happens")
+                    print(progress?.fractionCompleted)
+                    //self?.uploadProgresses[i] = Float((progress?.fractionCompleted)!)
+                })
+            },
+            completionHandler: {[weak self](content: AWSContent?, error: Error?) -> Void in
+                guard let strongSelf = self else { return }
+                if let error = error {
+                    print("Failed to upload an object. \(error)")
+                } else {
+                    print("Object upload complete. \(error)")
+                    //self?.segueIfAllUploadsCompleted()
+                }
+            })
+    }
+    func uploadPicture(_ picName: String, picture: UIImage, i: Int) {
+        let key = "public/\(picName)"
+        let imageData: Data = UIImageJPEGRepresentation(picture, 0.1)!//UIImagePNGRepresentation(picture)!
+        
+        
+        uploadWithData(imageData, forKey: key, i:i)
+        //S3Upload(picName, picture: picture)
+    }
+    func segueIfAllUploadsCompleted(){
+        for temp in uploadProgresses{
+            if(temp != 1.0){
+                return
+            }
+        }
+        self.tabBarController?.selectedIndex = 0
+    }
+    //----------- --------------- -------------- ---------- UPLOAD FILES ------------- ----------- ------------- //ends
 }

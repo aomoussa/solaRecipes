@@ -22,41 +22,25 @@ import Foundation
 import UIKit
 import AWSDynamoDB
 
-class recipe: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
+class recipe {
     
-    var _id: String?
-    var _name: String?
-    var _description: String?
-    var _duration: String?
-    var _instructions: String?
-    var _temperature: String?
-    var _userID: String?
+    var picures = [UIImage]()
+    var recie = DBRecipe()
     
-    class func dynamoDBTableName() -> String {
-        
-        return "solarrecipes-mobilehub-623139932-Recipe"
+    init(id: String, name: String, insts: String, desc: String, temp: String, dur: String, userID: String, numOfPics: Int){
+        recie?._id = id
+        recie?._name = name
+        recie?._instructions = insts
+        recie?._description = desc
+        recie?._temperature = temp
+        recie?._duration = dur
+        recie?._userID = userID
+        recie?._numberOfPictures = numOfPics as NSNumber
+    }
+    init(recip: DBRecipe){
+        recie = recip
     }
     
-    class func hashKeyAttribute() -> String {
-        
-        return "_id"
-    }
-    
-    class func rangeKeyAttribute() -> String {
-        
-        return "_name"
-    }
-    
-    override class func jsonKeyPathsByPropertyKey() -> [AnyHashable: Any] {
-        return [
-            "_id" : "id",
-            "_name" : "name",
-            "_description" : "description",
-            "_duration" : "duration",
-            "_instructions" : "instructions",
-            "_temperature" : "temperature",
-            "_userID" : "userID",
-        ]
-    }
+
 }
 

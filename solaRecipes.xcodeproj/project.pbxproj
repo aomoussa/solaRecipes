@@ -220,6 +220,7 @@
 				TargetAttributes = {
 					898697E61D88F17D006EBFF1 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = C39656PGLG;
 						LastSwiftMigration = 0800;
 					};
 				};
@@ -403,12 +404,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = C39656PGLG;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/solaRecipes/Sdk/Aws",
 					"$(PROJECT_DIR)/AmazonAws",
 				);
 				INFOPLIST_FILE = solaRecipes/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anagamedfash5.solaRecipes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -420,12 +423,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = C39656PGLG;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/solaRecipes/Sdk/Aws",
 					"$(PROJECT_DIR)/AmazonAws",
 				);
 				INFOPLIST_FILE = solaRecipes/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anagamedfash5.solaRecipes;
 				PRODUCT_NAME = "$(TARGET_NAME)";

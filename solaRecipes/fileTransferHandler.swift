@@ -18,7 +18,14 @@ class fileTransferHandler{
     }
     fileprivate func uploadWithData(_ data: Data, forKey key: String) {
         
-        let manager = AWSUserFileManager() //.default()
+        let S3Bucket = "solarrecipes-userfiles-mobilehub-623139932"
+        let credentialProvider = AWSCognitoCredentialsProvider(regionType: .usEast1, identityPoolId: "us-east-1:0f8aff81-0c9c-41f4-bd2a-e9083e706388")
+        let configuration = AWSServiceConfiguration(region: .usEast1, credentialsProvider: credentialProvider)
+        let userFileManagerConfiguration = AWSUserFileManagerConfiguration(bucketName: S3Bucket, serviceConfiguration: configuration)
+        
+        AWSUserFileManager.register(with: userFileManagerConfiguration, forKey: "randomManagerIJustCreated")
+        
+        let manager = AWSUserFileManager.UserFileManager(forKey: "randomManagerIJustCreated")
         let localContent = manager.localContent(with: data, key: key)
         print("about to upload picture rn ")
         localContent.uploadWithPin(
@@ -41,10 +48,11 @@ class fileTransferHandler{
             })
     }
     func upload(_ picName: String, picture: UIImage) {
+        let key = "public/\(picName)"
         let imageData: Data = UIImagePNGRepresentation(picture)!
         
-        //uploadWithData(imageData, forKey: picName)
-        S3Upload(picName, picture: picture)
+        uploadWithData(imageData, forKey: key)
+        //S3Upload(picName, picture: picture)
     } //----------- --------------- -------------- ---------- UPLOAD ------------- ----------- ------------- -----------//
     func S3Upload(_ picName: String, picture: UIImage){
         

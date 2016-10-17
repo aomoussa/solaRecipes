@@ -8,17 +8,20 @@
 
 import UIKit
 import AWSDynamoDB
+import AWSMobileHubHelper
+import AWSS3
 
-class homeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class homeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout  {
     @IBOutlet weak var ovenTableView: UITableView!
     
     @IBOutlet weak var recipeTableView: UITableView!
-
+    
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
     var recies = [recipe]()
     var ovens = [oven]()
     
+    private var manager: AWSUserFileManager!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +35,20 @@ class homeViewController: UIViewController, UITableViewDelegate, UITableViewData
         queryRecipeData()
         ovenTableView.isHidden = true
         recipeTableView.isHidden = false
+        
+        let S3Bucket = "solarrecipes-userfiles-mobilehub-623139932"
+        let credentialProvider = AWSCognitoCredentialsProvider(regionType: .usEast1, identityPoolId: "us-east-1:0f8aff81-0c9c-41f4-bd2a-e9083e706388")
+        let configuration = AWSServiceConfiguration(region: .usEast1, credentialsProvider: credentialProvider)
+        let userFileManagerConfiguration = AWSUserFileManagerConfiguration(bucketName: S3Bucket, serviceConfiguration: configuration)
+        
+        AWSUserFileManager.register(with: userFileManagerConfiguration, forKey: "randomManagerIJustCreated")
+        
+        manager = AWSUserFileManager.UserFileManager(forKey: "randomManagerIJustCreated")
+        
+        
+        
+        //let content = AWSContent()
+        //downloadContent(content: content, pinOnCompletion: true)
     }
     func getSegmentedControlState(sc: UISegmentedControl) -> String{
         switch(sc.selectedSegmentIndex){
@@ -60,18 +77,23 @@ class homeViewController: UIViewController, UITableViewDelegate, UITableViewData
         let dynamoDBObjectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBScanExpression()
         queryExpression.limit = 100;
-        dynamoDBObjectMapper.scan(recipe.self, expression: queryExpression).continue({ (task:AWSTask!) -> AnyObject! in
+        dynamoDBObjectMapper.scan(DBRecipe.self, expression: queryExpression).continue({ (task:AWSTask!) -> AnyObject! in
             
             print("task result is \(task.result)")
             if task.result != nil {
                 
                 let paginatedOutput = task.result as? AWSDynamoDBPaginatedOutput!
                 
-                for item in paginatedOutput?.items as! [recipe] {
+                var i = 0
+                for item in paginatedOutput?.items as! [DBRecipe] {
                     //NSLog(item.M!.stringValue)
-                    self.recies.append(item)
-                    self.recipeTableView.reloadData()
-                    print("self.recies.count: \(self.recies.count)")
+                    let newRecie = recipe(recip: item)
+                    self.recies.append(newRecie)
+                    DispatchQueue.main.async(execute: {
+                        self.recipeTableView.reloadData()
+                        i = i + 1
+                    })
+                    
                 }
                 
                 if ((task.error) != nil) {
@@ -97,11 +119,15 @@ class homeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 
                 let paginatedOutput = task.result as? AWSDynamoDBPaginatedOutput!
                 
+                var i = 0
                 for item in paginatedOutput?.items as! [oven] {
                     //NSLog(item.M!.stringValue)
                     self.ovens.append(item)
-                    self.ovenTableView.reloadData()
-                    print("self.ovens.count: \(self.ovens.count)")
+                    DispatchQueue.main.async(execute: {
+                        self.recipeTableView.reloadData()
+                        i = i + 1
+                    })
+                    
                 }
                 
                 if ((task.error) != nil) {
@@ -115,21 +141,19 @@ class homeViewController: UIViewController, UITableViewDelegate, UITableViewData
             return nil
         })
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
+    
     // ---------------- --------------- table view code
     func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         switch(tableView){
         case ovenTableView:
             return ovens.count
@@ -140,8 +164,6 @@ class homeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        
         switch(tableView){
         case ovenTableView:
             let cell = tableView.dequeueReusableCell(withIdentifier: "ovenCell", for: indexPath)
@@ -149,11 +171,45 @@ class homeViewController: UIViewController, UITableViewDelegate, UITableViewData
             cell.detailTextLabel?.text = ovens[(indexPath as NSIndexPath).row]._description
             return cell
         default:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "recipeCell", for: indexPath)
-            cell.textLabel?.text = recies[(indexPath as NSIndexPath).row]._name
-            cell.detailTextLabel?.text = recies[(indexPath as NSIndexPath).row]._description
-            return cell
+            /*
+             let cell = tableView.dequeueReusableCell(withIdentifier: "recipeCell", for: indexPath)
+             cell.textLabel?.text = recies[(indexPath as NSIndexPath).row]._name
+             cell.detailTextLabel?.text = recies[(indexPath as NSIndexPath).row]._description
+             return cell
+             */
+            return makeRecipeCell(indexPath: indexPath)
         }
+    }
+    func makeRecipeCell(indexPath: IndexPath) -> UITableViewCell{
+        let screenHeight = self.view.frame.height
+        let screenWidth = self.view.frame.width
+        let cellHeight =  screenHeight/3
+        
+        let cell = UITableViewCell()
+        let titleLabel = UILabel()
+        titleLabel.frame = CGRect(x: 0, y: 0, width: screenWidth*0.4, height: cellHeight*0.1)
+        titleLabel.text = recies[(indexPath as NSIndexPath).row].recie?._name
+        
+        let descLabel = UILabel()
+        descLabel.frame = CGRect(x: 0, y: cellHeight*0.2, width: screenWidth*0.6, height: cellHeight*0.1)
+        descLabel.text = recies[(indexPath as NSIndexPath).row].recie?._description
+        
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: screenWidth/4, height: screenWidth/4)
+        let pcvframe = CGRect(x: 0, y: cellHeight*0.3, width: screenWidth, height: cellHeight*0.7)
+        let picsCollectionView = UICollectionView(frame: pcvframe, collectionViewLayout: layout)
+        picsCollectionView.tag = indexPath.row
+        picsCollectionView.delegate = self
+        picsCollectionView.dataSource = self
+        picsCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "pictureCell") //(registerClass: UICollectionViewCell(), forCellWithReuseIdentifier: "pictureCell")
+        
+        
+        cell.addSubview(titleLabel)
+        cell.addSubview(descLabel)
+        cell.addSubview(picsCollectionView)
+        
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -166,17 +222,195 @@ class homeViewController: UIViewController, UITableViewDelegate, UITableViewData
             break
         }
     }
-
     
-    // ---------------- --------------- table view code
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let screenHeight = self.view.frame.height
+        return screenHeight/3
     }
-    */
-
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        populatePicturesAtIndex(i: indexPath.row)
+    }
+    // ---------------- --------------- table view code
+    
+    //----------------------------- COLLECTIONVIEW CODE -------------------------------- starts
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        switch(collectionView){
+        case ovenTableView:
+            return 0
+            break
+        default:
+            return recies[collectionView.tag].picures.count
+            break
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let colHeight = collectionView.frame.height
+        let cellHeight =  (colHeight)*0.8
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pictureCell", for: indexPath)
+        
+        let pictureView = UIImageView(frame: CGRect(x: 0, y: 0, width: cellHeight, height: cellHeight))
+        let image = recies[collectionView.tag].picures[indexPath.row]
+        pictureView.image = image
+        pictureView.contentMode = UIViewContentMode.scaleAspectFill
+        cell.addSubview(pictureView)
+        
+        //cell.backgroundColor = UIColor(patternImage: recies[collectionView.tag].picures[indexPath.row])
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let screenHeight = self.view.frame.height
+        let cellHeight =  (screenHeight/3)*0.7
+        return CGSize(width: cellHeight, height: cellHeight)
+    }
+    
+    //----------------------------- COLLECTIONVIEW CODE -------------------------------- ends
+    func populatePicturesAtIndex(i: Int){
+        
+        if(recies[i].picures.count == 0){
+            recies[i].picures.append(UIImage(named: "plus.jpg")!)
+            //S3DownloadPicture(recipeIndex: i)
+            loadContentsAtDirectory(prefix: "public/\((recies[i].recie?._name!)!)/", i: i)
+        }
+        
+    }
+    /*
+     func loadMoreContents(){
+     let S3Bucket = "solarrecipes-userfiles-mobilehub-623139932"
+     let credentialProvider = AWSCognitoCredentialsProvider(regionType: .usEast1, identityPoolId: "us-east-1:0f8aff81-0c9c-41f4-bd2a-e9083e706388")
+     let configuration = AWSServiceConfiguration(region: .usEast1, credentialsProvider: credentialProvider)
+     let userFileManagerConfiguration = AWSUserFileManagerConfiguration(bucketName: S3Bucket, serviceConfiguration: configuration)
+     
+     AWSUserFileManager.register(with: userFileManagerConfiguration, forKey: "randomManagerIJustCreated")
+     
+     let manager = AWSUserFileManager.UserFileManager(forKey: "randomManagerIJustCreated")
+     var contentsHere = [AWSContent]()
+     var didLoadAllContents = false
+     var markerHere: String?
+     manager.listAvailableContents(withPrefix: "public/", marker: nil, completionHandler: {[weak self](contents: [AWSContent]?, nextMarker: String?, error: NSError?) -> Void in
+     guard let strongSelf = self else { return }
+     if let error = error {
+     print("Failed to load the list of contents. \(error)")
+     }
+     if let contents = contents , contents.count > 0 {
+     contentsHere = contents
+     if let nextMarker = nextMarker , !nextMarker.isEmpty {
+     didLoadAllContents = false
+     } else {
+     didLoadAllContents = true
+     }
+     markerHere = nextMarker
+     }
+     print(contentsHere)
+     } as! ([AWSContent]?, String?, Error?) -> Void
+     }*/
+    func S3DownloadPicture(recipeIndex: Int){
+        let downloadRequest = AWSS3TransferManagerDownloadRequest()
+        var downloadFileURL = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("\(recies[recipeIndex].recie?._name)/picture1")
+        
+        let S3Bucket = "solarrecipes-userfiles-mobilehub-623139932"
+        
+        downloadRequest!.bucket = S3Bucket
+        downloadRequest!.key = "/example-image.png"//\(recies[recipeIndex]._name)/picture1"
+        downloadRequest!.downloadingFileURL = downloadFileURL
+        
+        let credentialsProvider = AWSCognitoCredentialsProvider(regionType:.usEast1,identityPoolId:"us-east-1:0f8aff81-0c9c-41f4-bd2a-e9083e706388")
+        
+        let configuration = AWSServiceConfiguration(region:.usEast1, credentialsProvider:credentialsProvider)
+        
+        AWSServiceManager.default().defaultServiceConfiguration = configuration
+        let transferManager = AWSS3TransferManager.default()
+        
+        //dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        transferManager?.download(downloadRequest).continue({ (task) -> AnyObject! in
+            if let error = task.error {
+                print("download failed or paused: [\(error)] \n")
+            } else if let exception = task.exception {
+                print("download failed: [\(exception)] \n")
+            } else {
+                //dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                print("i'm in download()  ")
+                downloadFileURL = downloadRequest?.downloadingFileURL
+                //})
+            }
+            if((task.result) != nil){
+                print("downloaded??")
+                print(downloadFileURL!.path)
+                self.recies[recipeIndex].picures.append(UIImage(contentsOfFile: downloadFileURL!.path)!)
+            }
+            else{
+                
+            }
+            return nil
+        })
+        
+    }
+    
+    private func downloadContent(content: AWSContent, pinOnCompletion: Bool, i: Int) {
+        content.download(
+            with: .ifNewerExists,
+            pinOnCompletion: pinOnCompletion,
+            progressBlock: {[weak self](content: AWSContent?, progress: Progress?) -> Void in
+                guard self != nil else { return }
+                /* Show progress in UI. */
+            },
+            completionHandler: {[weak self](content: AWSContent?, data: Data?, error: Error?) -> Void in
+                guard self != nil else { return }
+                if let error = error {
+                    print("Failed to download a content from a server. \(error)")
+                    return
+                }
+                print("Object download complete.")
+                print("downloaded??")
+                self?.recies[i].picures.append(UIImage(data: data!)!)
+                DispatchQueue.main.async(execute: {
+                    self?.recipeTableView.reloadRows(at: [IndexPath(row: i, section: 0)], with: UITableViewRowAnimation.automatic)
+                })
+                print(content)
+                
+            })
+    }
+    private func loadContentsAtDirectory(prefix: String, i: Int) {
+        print("prefix recieved was \(prefix)")
+        var contentsHere: [AWSContent]?
+        var markerHere: String?
+        var didLoadAllContents: Bool!
+        manager.listAvailableContents(withPrefix: prefix, marker: markerHere, completionHandler: {[weak self](contents: [AWSContent]?, nextMarker: String?, error: Error?) -> Void in
+            guard let strongSelf = self else { return }
+            if let error = error {
+                
+                print("Failed to load the list of contents. \(error)")
+            }
+            if let contents = contents , contents.count > 0 {
+                contentsHere = contents
+                if let nextMarker = nextMarker , !nextMarker.isEmpty {
+                    didLoadAllContents = false
+                } else {
+                    didLoadAllContents = true
+                }
+                markerHere = nextMarker
+            }
+            
+            print("contents is \(contentsHere)")
+            if (contentsHere != nil){
+                for temp in contentsHere!{
+                    print(temp.key)
+                    self?.downloadContent(content: temp, pinOnCompletion: false, i:i)
+                }
+            }
+            })
+    }
+    /*
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }
