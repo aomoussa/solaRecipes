@@ -11,12 +11,10 @@
 		8957802D1D976B4900D1FD75 /* recipePicturesCollectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8957802C1D976B4900D1FD75 /* recipePicturesCollectionTableViewCell.swift */; };
 		895780311D982BFC00D1FD75 /* recipeTextInforTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895780301D982BFC00D1FD75 /* recipeTextInforTableViewCell.swift */; };
 		898697EB1D88F17E006EBFF1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898697EA1D88F17E006EBFF1 /* AppDelegate.swift */; };
-		898697ED1D88F17E006EBFF1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898697EC1D88F17E006EBFF1 /* ViewController.swift */; };
 		898697F01D88F17E006EBFF1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 898697EE1D88F17E006EBFF1 /* Main.storyboard */; };
 		898697F21D88F17E006EBFF1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 898697F11D88F17E006EBFF1 /* Assets.xcassets */; };
 		898697F51D88F17E006EBFF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 898697F31D88F17E006EBFF1 /* LaunchScreen.storyboard */; };
 		898697FD1D88F38C006EBFF1 /* recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898697FC1D88F38C006EBFF1 /* recipe.swift */; };
-		898698011D88F97E006EBFF1 /* selectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898698001D88F97E006EBFF1 /* selectorViewController.swift */; };
 		898698031D8908E4006EBFF1 /* homeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898698021D8908E4006EBFF1 /* homeViewController.swift */; };
 		89AB835A1DA1919A00902824 /* oven.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB83591DA1919A00902824 /* oven.swift */; };
 		89B5AE451DA0888F006953E1 /* fileTransferHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B5AE441DA0888E006953E1 /* fileTransferHandler.swift */; };
@@ -34,6 +32,7 @@
 		89DCCD491D8C784000CC2590 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DCCD481D8C784000CC2590 /* libz.tbd */; };
 		89DCCD4B1D8C785200CC2590 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DCCD4A1D8C785200CC2590 /* libsqlite3.tbd */; };
 		89DCCD4D1D8CDAEC00CC2590 /* addRecipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DCCD4C1D8CDAEC00CC2590 /* addRecipeViewController.swift */; };
+		89E1D7261DB57B380043FE9C /* searchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E1D7251DB57B380043FE9C /* searchViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -58,13 +57,11 @@
 		895780301D982BFC00D1FD75 /* recipeTextInforTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = recipeTextInforTableViewCell.swift; sourceTree = "<group>"; };
 		898697E71D88F17E006EBFF1 /* solaRecipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = solaRecipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		898697EA1D88F17E006EBFF1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		898697EC1D88F17E006EBFF1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		898697EF1D88F17E006EBFF1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		898697F11D88F17E006EBFF1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		898697F41D88F17E006EBFF1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		898697F61D88F17E006EBFF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		898697FC1D88F38C006EBFF1 /* recipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = recipe.swift; sourceTree = "<group>"; };
-		898698001D88F97E006EBFF1 /* selectorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = selectorViewController.swift; sourceTree = "<group>"; };
 		898698021D8908E4006EBFF1 /* homeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = homeViewController.swift; sourceTree = "<group>"; };
 		89AB83591DA1919A00902824 /* oven.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = oven.swift; sourceTree = "<group>"; };
 		89B5AE441DA0888E006953E1 /* fileTransferHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = fileTransferHandler.swift; sourceTree = "<group>"; };
@@ -79,6 +76,7 @@
 		89DCCD481D8C784000CC2590 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		89DCCD4A1D8C785200CC2590 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		89DCCD4C1D8CDAEC00CC2590 /* addRecipeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addRecipeViewController.swift; sourceTree = "<group>"; };
+		89E1D7251DB57B380043FE9C /* searchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = searchViewController.swift; path = ../searchViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,10 +143,9 @@
 			children = (
 				8957802E1D982B3600D1FD75 /* addingThings */,
 				898697EA1D88F17E006EBFF1 /* AppDelegate.swift */,
-				898697EC1D88F17E006EBFF1 /* ViewController.swift */,
 				898697EE1D88F17E006EBFF1 /* Main.storyboard */,
+				89E1D7251DB57B380043FE9C /* searchViewController.swift */,
 				898698021D8908E4006EBFF1 /* homeViewController.swift */,
-				898698001D88F97E006EBFF1 /* selectorViewController.swift */,
 				898697FC1D88F38C006EBFF1 /* recipe.swift */,
 				89AB83591DA1919A00902824 /* oven.swift */,
 				89B5AE441DA0888E006953E1 /* fileTransferHandler.swift */,
@@ -280,6 +277,7 @@
 			files = (
 				89B5AE451DA0888F006953E1 /* fileTransferHandler.swift in Sources */,
 				8957802B1D976B2300D1FD75 /* recipeTitleTableViewCell.swift in Sources */,
+				89E1D7261DB57B380043FE9C /* searchViewController.swift in Sources */,
 				89DCCD471D8C773E00CC2590 /* Users.swift in Sources */,
 				89AB835A1DA1919A00902824 /* oven.swift in Sources */,
 				898698031D8908E4006EBFF1 /* homeViewController.swift in Sources */,
@@ -287,8 +285,6 @@
 				89DCCD441D8C773E00CC2590 /* AWSMobileClient.swift in Sources */,
 				89DCCD4D1D8CDAEC00CC2590 /* addRecipeViewController.swift in Sources */,
 				89DCCD461D8C773E00CC2590 /* Recipes.swift in Sources */,
-				898697ED1D88F17E006EBFF1 /* ViewController.swift in Sources */,
-				898698011D88F97E006EBFF1 /* selectorViewController.swift in Sources */,
 				898697FD1D88F38C006EBFF1 /* recipe.swift in Sources */,
 				898697EB1D88F17E006EBFF1 /* AppDelegate.swift in Sources */,
 				8957802D1D976B4900D1FD75 /* recipePicturesCollectionTableViewCell.swift in Sources */,
