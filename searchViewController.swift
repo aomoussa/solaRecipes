@@ -40,12 +40,53 @@ class searchViewController: UIViewController, UITableViewDelegate, UITableViewDa
             "#name": "name",
         ]
         queryExpression.expressionAttributeValues = [
-            ":id": "1",
+            ":id": "0",
             ":name": filterName,
         ]
         
         
         objectMapper.query(DBRecipe.self, expression: queryExpression, completionHandler: {(response: AWSDynamoDBPaginatedOutput?, error: Error?) -> Void in
+            DispatchQueue.main.async(execute: {
+                completionHandler(response, error)
+                
+            })
+        })
+    }
+    func queryRecipesBeginWithNameWithCompletionHandler(filterName: String, completionHandler: @escaping (_ response: AWSDynamoDBPaginatedOutput?, _ error: Error?) -> Void) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        let queryExpression = AWSDynamoDBQueryExpression()
+        
+        queryExpression.keyConditionExpression = "begins_with(#name, :name)"
+        queryExpression.expressionAttributeNames = [
+            "#name": "name"
+        ]
+        queryExpression.expressionAttributeValues = [
+            ":name": filterName
+        ]
+        
+        
+        objectMapper.query(DBRecipe.self, expression: queryExpression, completionHandler: {(response: AWSDynamoDBPaginatedOutput?, error: Error?) -> Void in
+            DispatchQueue.main.async(execute: {
+                completionHandler(response, error)
+                
+            })
+        })
+    }
+    func newScanWithFilterNameAndCompletionHandler(filterName: String, completionHandler: @escaping (_ response: AWSDynamoDBPaginatedOutput?, _ error: Error?) -> Void) {
+        self.recies.removeAll()
+        let dynamoDBObjectMapper = AWSDynamoDBObjectMapper.default()
+        let scanExpression = AWSDynamoDBScanExpression()
+        
+        scanExpression.filterExpression = "begins_with(#name, :name)"
+        scanExpression.expressionAttributeNames = [
+            "#name": "name"
+        ]
+        scanExpression.expressionAttributeValues = [
+            ":name": filterName
+        ]
+        
+        scanExpression.limit = 10;
+        dynamoDBObjectMapper.scan(DBRecipe.self, expression: scanExpression, completionHandler: {(response: AWSDynamoDBPaginatedOutput?, error: Error?) -> Void in
             DispatchQueue.main.async(execute: {
                 completionHandler(response, error)
                 
@@ -127,7 +168,8 @@ class searchViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
             
         }
-        queryWithPartitionKeyAndSortKeyWithCompletionHandler(filterName: scanExpression, completionHandler: completionHandler )
+        newScanWithFilterNameAndCompletionHandler(filterName: scanExpression, completionHandler: completionHandler )
+        self.view.endEditing(true)
     }
     // ---------------- --------------- table view code
     func numberOfSections(in tableView: UITableView) -> Int {
