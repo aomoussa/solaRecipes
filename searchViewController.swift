@@ -10,11 +10,19 @@ import UIKit
 import AWSDynamoDB
 import AWSMobileHubHelper
 
-class searchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+class searchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!
     var recies = [recipe]()
     @IBOutlet weak var searchResultsTableView: UITableView!
+    
+    var advancedSearchDuration = 10
+    var advancedSearchWeight = 10
+    var advancedSearchFromTemp = 20
+    var advancedSearchToTemp = 100
+    
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -173,7 +181,7 @@ class searchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     // ---------------- --------------- table view code
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -181,6 +189,9 @@ class searchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         //case ovenTableView:
         //    return ovens.count
         //default:
+        if(section == 0){
+            return 1
+        }
         return recies.count
         //}
     }
@@ -200,9 +211,43 @@ class searchViewController: UIViewController, UITableViewDelegate, UITableViewDa
          cell.detailTextLabel?.text = recies[(indexPath as NSIndexPath).row]._description
          return cell
          */
-        return makeRecipeCell(indexPath: indexPath)
+        if(indexPath.section == 0){
+            //return makeAdvancedSearchCell(indexPath: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "advancedSearchCell") as! advancedSearchTableViewCell
+            cell.fromTempTextField.text = "\(advancedSearchFromTemp)F"
+            cell.toTempTextField.text = "\(advancedSearchToTemp)F"
+            cell.fromTempTextField.delegate = self
+            cell.toTempTextField.delegate = self
+            
+            cell.durationSlider.value = Float(advancedSearchDuration)
+            cell.weightSlider.value = Float(advancedSearchWeight)
+            cell.durationLabel.text = "\(advancedSearchDuration) mins"
+            cell.weightLabel.text = "\(advancedSearchWeight) lbs"
+            
+            cell.durationSlider.addTarget(self, action:  #selector(searchViewController.durationSliderChanged(_:)), for: UIControlEvents.valueChanged)
+            cell.weightSlider.addTarget(self, action: #selector(searchViewController.weightSliderChanged(_:)), for: UIControlEvents.valueChanged
+            )
+            return cell
+        }
+        else{
+            return makeRecipeCell(indexPath: indexPath)
+        }
         //}
     }
+    func durationSliderChanged(_ sender: UISlider){
+        advancedSearchDuration = Int(sender.value)
+        print("durationSliderChanged to \(advancedSearchDuration)")
+        searchResultsTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+    }
+    func weightSliderChanged(_ sender: UISlider){
+        advancedSearchWeight = Int(sender.value)
+        print("weightSliderChanged to \(advancedSearchWeight)")
+        searchResultsTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+    }
+    /*func  makeAdvancedSearchCell(indexPath: IndexPath) -> UITableViewCell{
+        let cell = tableView
+        
+    }*/
     func makeRecipeCell(indexPath: IndexPath) -> UITableViewCell{
         let screenHeight = self.view.frame.height
         let screenWidth = self.view.frame.width
