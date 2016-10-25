@@ -27,10 +27,10 @@ class DBRecipe: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _id: String?
     var _name: String?
     var _description: String?
-    var _duration: String?
+    var _duration: NSNumber?
     var _instructions: String?
     var _numberOfPictures: NSNumber?
-    var _temperature: String?
+    var _temperature: NSNumber?
     var _userID: String?
     
     class func dynamoDBTableName() -> String {

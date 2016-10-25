@@ -24,6 +24,9 @@ class advancedSearchTableViewCell: UITableViewCell {
     
     @IBOutlet weak var weightLabel: UILabel!
     
+    @IBOutlet weak var searchButton: UIButton!
+    
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()

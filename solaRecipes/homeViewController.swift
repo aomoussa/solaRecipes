@@ -183,31 +183,53 @@ class homeViewController: UIViewController, UITableViewDelegate, UITableViewData
     func makeRecipeCell(indexPath: IndexPath) -> UITableViewCell{
         let screenHeight = self.view.frame.height
         let screenWidth = self.view.frame.width
-        let cellHeight =  screenHeight/3
+        let cellHeight =  screenHeight/2
         
         let cell = UITableViewCell()
+        
+        let userPicButton = UIButton()
+        userPicButton.frame = CGRect(x: 0, y: 0, width: screenWidth*0.2, height: screenWidth*0.2)
+        userPicButton.setBackgroundImage(UIImage(named: "plus.jpg"), for: UIControlState.normal)
+        
+        let userNameLabel = UILabel()
+        userNameLabel.frame = CGRect(x: screenWidth*0.3, y: cellHeight*0.05, width: screenWidth*0.7, height: cellHeight*0.1)
+        userNameLabel.text = "Ahmed Moussa"//recies[(indexPath as NSIndexPath).row].recie?._userID
+        
         let titleLabel = UILabel()
-        titleLabel.frame = CGRect(x: 0, y: 0, width: screenWidth*0.4, height: cellHeight*0.1)
+        titleLabel.frame = CGRect(x: 0, y: screenWidth*0.2, width: screenWidth*0.4, height: cellHeight*0.1)
         titleLabel.text = recies[(indexPath as NSIndexPath).row].recie?._name
         
         let descLabel = UILabel()
-        descLabel.frame = CGRect(x: 0, y: cellHeight*0.2, width: screenWidth*0.6, height: cellHeight*0.1)
+        descLabel.frame = CGRect(x: screenWidth*0.4, y: screenWidth*0.2, width: screenWidth*0.6, height: cellHeight*0.1)
         descLabel.text = recies[(indexPath as NSIndexPath).row].recie?._description
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: screenWidth/4, height: screenWidth/4)
-        let pcvframe = CGRect(x: 0, y: cellHeight*0.3, width: screenWidth, height: cellHeight*0.7)
+        let pcvframe = CGRect(x: 0, y: cellHeight*0.3, width: screenWidth, height: cellHeight*0.5)
         let picsCollectionView = UICollectionView(frame: pcvframe, collectionViewLayout: layout)
         picsCollectionView.tag = indexPath.row
         picsCollectionView.delegate = self
         picsCollectionView.dataSource = self
         picsCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "pictureCell") //(registerClass: UICollectionViewCell(), forCellWithReuseIdentifier: "pictureCell")
         
+        let tempLabel = UILabel()
+        tempLabel.frame = CGRect(x: 0, y: cellHeight*0.85, width: screenWidth*0.5, height: cellHeight*0.1)
         
+        tempLabel.text = "temp: \((recies[(indexPath as NSIndexPath).row].recie?._temperature)!)F"
+        
+        let durationLabel = UILabel()
+        durationLabel.frame = CGRect(x: screenWidth*0.5, y: cellHeight*0.85, width: screenWidth*0.5, height: cellHeight*0.1)
+        durationLabel.text = "ETA: \((recies[(indexPath as NSIndexPath).row].recie?._duration)!)mins"
+        
+        
+        cell.addSubview(userPicButton)
+        cell.addSubview(userNameLabel)
         cell.addSubview(titleLabel)
         cell.addSubview(descLabel)
         cell.addSubview(picsCollectionView)
+        cell.addSubview(tempLabel)
+        cell.addSubview(durationLabel)
         
         return cell
     }
@@ -225,7 +247,7 @@ class homeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let screenHeight = self.view.frame.height
-        return screenHeight/3
+        return screenHeight/2
     }
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         populatePicturesAtIndex(i: indexPath.row)

@@ -101,6 +101,59 @@ class searchViewController: UIViewController, UITableViewDelegate, UITableViewDa
             })
         })
     }
+    func advancedScan(filterName: String, fromTemperature: NSNumber, toTemperature: NSNumber, duration: NSNumber,  completionHandler: @escaping (_ response: AWSDynamoDBPaginatedOutput?, _ error: Error?) -> Void) {
+        self.recies.removeAll()
+        let dynamoDBObjectMapper = AWSDynamoDBObjectMapper.default()
+        let scanExpression = AWSDynamoDBScanExpression()
+        
+        scanExpression.filterExpression = "begins_with(#name, :name) AND #froTemperature > :fromTemperature AND #toTemperature < :toTemperature AND #duration < :duration"
+        scanExpression.expressionAttributeNames = [
+            "#name": "name",
+            "#froTemperature": "temperature",
+            "#toTemperature": "temperature",
+            "#duration": "duration"
+        ]
+        scanExpression.expressionAttributeValues = [
+            ":name": filterName,
+            ":fromTemperature": fromTemperature,
+            ":toTemperature": toTemperature,
+            ":duration": duration
+        ]
+        
+        scanExpression.limit = 10;
+        dynamoDBObjectMapper.scan(DBRecipe.self, expression: scanExpression, completionHandler: {(response: AWSDynamoDBPaginatedOutput?, error: Error?) -> Void in
+            DispatchQueue.main.async(execute: {
+                completionHandler(response, error)
+                
+            })
+        })
+    }
+
+    func advancedScanNoFilterName(fromTemperature: NSNumber, toTemperature: NSNumber, duration: NSNumber,  completionHandler: @escaping (_ response: AWSDynamoDBPaginatedOutput?, _ error: Error?) -> Void) {
+        self.recies.removeAll()
+        let dynamoDBObjectMapper = AWSDynamoDBObjectMapper.default()
+        let scanExpression = AWSDynamoDBScanExpression()
+        
+        scanExpression.filterExpression = "#froTemperature > :fromTemperature AND #toTemperature < :toTemperature AND #duration < :duration"
+        scanExpression.expressionAttributeNames = [
+            "#froTemperature": "temperature",
+            "#toTemperature": "temperature",
+            "#duration": "duration"
+        ]
+        scanExpression.expressionAttributeValues = [
+            ":fromTemperature": fromTemperature,
+            ":toTemperature": toTemperature,
+            ":duration": duration
+        ]
+        
+        scanExpression.limit = 10;
+        dynamoDBObjectMapper.scan(DBRecipe.self, expression: scanExpression, completionHandler: {(response: AWSDynamoDBPaginatedOutput?, error: Error?) -> Void in
+            DispatchQueue.main.async(execute: {
+                completionHandler(response, error)
+                
+            })
+        })
+    }
     func scanRecipeData(scanExpression: String){
         self.recies.removeAll()
         let dynamoDBObjectMapper = AWSDynamoDBObjectMapper.default()
@@ -176,7 +229,13 @@ class searchViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
             
         }
-        newScanWithFilterNameAndCompletionHandler(filterName: scanExpression, completionHandler: completionHandler )
+        if(searchBar.text == ""){
+            advancedScanNoFilterName(fromTemperature: 0, toTemperature: 150, duration: 300, completionHandler: completionHandler)
+        }
+        else{
+            advancedScan(filterName: scanExpression, fromTemperature: 0, toTemperature: 150, duration: 300, completionHandler: completionHandler)
+        }
+        //newScanWithFilterNameAndCompletionHandler(filterName: scanExpression, completionHandler: completionHandler )
         self.view.endEditing(true)
     }
     // ---------------- --------------- table view code
@@ -214,10 +273,12 @@ class searchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if(indexPath.section == 0){
             //return makeAdvancedSearchCell(indexPath: indexPath)
             let cell = tableView.dequeueReusableCell(withIdentifier: "advancedSearchCell") as! advancedSearchTableViewCell
-            cell.fromTempTextField.text = "\(advancedSearchFromTemp)F"
-            cell.toTempTextField.text = "\(advancedSearchToTemp)F"
+            cell.fromTempTextField.text = "\(advancedSearchFromTemp)"
+            cell.toTempTextField.text = "\(advancedSearchToTemp)"
             cell.fromTempTextField.delegate = self
             cell.toTempTextField.delegate = self
+            cell.fromTempTextField.tag = 0
+            cell.toTempTextField.tag = 1
             
             cell.durationSlider.value = Float(advancedSearchDuration)
             cell.weightSlider.value = Float(advancedSearchWeight)
@@ -225,8 +286,10 @@ class searchViewController: UIViewController, UITableViewDelegate, UITableViewDa
             cell.weightLabel.text = "\(advancedSearchWeight) lbs"
             
             cell.durationSlider.addTarget(self, action:  #selector(searchViewController.durationSliderChanged(_:)), for: UIControlEvents.valueChanged)
-            cell.weightSlider.addTarget(self, action: #selector(searchViewController.weightSliderChanged(_:)), for: UIControlEvents.valueChanged
-            )
+            cell.weightSlider.addTarget(self, action: #selector(searchViewController.weightSliderChanged(_:)), for: UIControlEvents.valueChanged)
+            
+            cell.searchButton.addTarget(self, action: #selector(searchViewController.searchButtonClicked), for: UIControlEvents.touchUpInside)
+            
             return cell
         }
         else{
@@ -234,15 +297,69 @@ class searchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         //}
     }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        switch(textField.tag){
+        case 0:
+            advancedSearchFromTemp = Int(textField.text!)!
+            print("advancedSearchFromTemp to \(advancedSearchFromTemp)")
+            break
+        default:
+            advancedSearchToTemp = Int(textField.text!)!
+            print("advancedSearchToTemp to \(advancedSearchToTemp)")
+        }
+        searchResultsTableView.reloadData()//reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+    }
+    func searchButtonClicked(){
+        let completionHandler = {(response: AWSDynamoDBPaginatedOutput?, error: Error?) -> Void in
+            if let error = error {
+                var errorMessage = "Failed to retrieve items. \(error.localizedDescription)"
+                //if (error. == AWSServiceErrorDomain && error.code == AWSServiceErrorType.accessDeniedException.rawValue) {
+                //   errorMessage = "Access denied. You are not allowed to perform this operation."
+                //}
+                self.showAlertWithTitle(title: "Error", message: errorMessage)
+            }
+            else if response!.items.count == 0 {
+                self.showAlertWithTitle(title: "Not Found", message: "No items match your criteria. Insert more sample data and try again.")
+            }
+            else {
+                //it all worked out:
+                let paginatedOutput = response as? AWSDynamoDBPaginatedOutput!
+                
+                var i = 0
+                for item in paginatedOutput?.items as! [DBRecipe] {
+                    //NSLog(item.M!.stringValue)
+                    let newRecie = recipe(recip: item)
+                    self.recies.append(newRecie)
+                    self.searchResultsTableView.reloadData()
+                    print(self.recies)
+                    i = i + 1
+                    
+                }
+                
+            }
+            
+        }
+        var scanExpression = ""
+        scanExpression = searchBar.text!
+        if(searchBar.text == ""){
+            advancedScanNoFilterName(fromTemperature: advancedSearchFromTemp as NSNumber, toTemperature: advancedSearchToTemp as NSNumber, duration: advancedSearchDuration as NSNumber, completionHandler: completionHandler)
+        }
+        else{
+            advancedScan(filterName: scanExpression, fromTemperature: advancedSearchFromTemp as NSNumber, toTemperature: advancedSearchToTemp as NSNumber, duration: advancedSearchDuration as NSNumber, completionHandler: completionHandler)
+        }
+        
+        //newScanWithFilterNameAndCompletionHandler(filterName: scanExpression, completionHandler: completionHandler )
+        self.view.endEditing(true)
+    }
     func durationSliderChanged(_ sender: UISlider){
         advancedSearchDuration = Int(sender.value)
         print("durationSliderChanged to \(advancedSearchDuration)")
-        searchResultsTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+        searchResultsTableView.reloadData()//reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
     }
     func weightSliderChanged(_ sender: UISlider){
         advancedSearchWeight = Int(sender.value)
         print("weightSliderChanged to \(advancedSearchWeight)")
-        searchResultsTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+        searchResultsTableView.reloadData()//reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
     }
     /*func  makeAdvancedSearchCell(indexPath: IndexPath) -> UITableViewCell{
         let cell = tableView
@@ -289,11 +406,12 @@ class searchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         //    scanRecipeData()
         //    break
         //}
+        self.view.endEditing(true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let screenHeight = self.view.frame.height
-        return screenHeight/3
+        return screenHeight/2
     }
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         //populatePicturesAtIndex(i: indexPath.row)

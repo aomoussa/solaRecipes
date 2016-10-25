@@ -27,7 +27,7 @@ class recipe {
     var picures = [UIImage]()
     var recie = DBRecipe()
     
-    init(id: String, name: String, insts: String, desc: String, temp: String, dur: String, userID: String, numOfPics: Int){
+    init(id: String, name: String, insts: String, desc: String, temp: NSNumber, dur: NSNumber, userID: String, numOfPics: Int){
         recie?._id = id
         recie?._name = name
         recie?._instructions = insts

@@ -297,8 +297,8 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         let name = titleTextView.text
         let instructions = instructionsTextView.text
         let description = descriptionTextView.text
-        let temperature = "100"
-        let duration = "60"
+        let temperature = 100 as NSNumber
+        let duration = 60 as NSNumber
         let userID = AWSIdentityManager.default().identityId!
         let numberOfPictures = pictures.count
         
