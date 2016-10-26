@@ -7,7 +7,8 @@
 //
 
 import UIKit
-
+import FBSDKCoreKit
+import FacebookCore
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -16,14 +17,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         return AWSMobileClient.sharedInstance.didFinishLaunching(application, withOptions: launchOptions)
     }
     
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-        return AWSMobileClient.sharedInstance.withApplication(application, withURL: url, withSourceApplication: sourceApplication, withAnnotation: annotation as AnyObject)
+        
+        let fbstuff = FBSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: nil)
+        let AWSStuff = AWSMobileClient.sharedInstance.withApplication(application, withURL: url, withSourceApplication: sourceApplication, withAnnotation: annotation as AnyObject)
+        let combineFBAndAWS = fbstuff && AWSStuff
+        return combineFBAndAWS
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
+        AppEventsLogger.activate(application)
+        //FBSDKAppEvents.activateApp()
         AWSMobileClient.sharedInstance.applicationDidBecomeActive(application)
     }
 

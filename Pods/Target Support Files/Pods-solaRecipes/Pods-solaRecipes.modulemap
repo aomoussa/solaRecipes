@@ -1,0 +1,6 @@
+framework module Pods_solaRecipes {
+  umbrella header "Pods-solaRecipes-umbrella.h"
+
+  export *
+  module * { export * }
+}

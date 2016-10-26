@@ -34,6 +34,8 @@
 		89DCCD4B1D8C785200CC2590 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DCCD4A1D8C785200CC2590 /* libsqlite3.tbd */; };
 		89DCCD4D1D8CDAEC00CC2590 /* addRecipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DCCD4C1D8CDAEC00CC2590 /* addRecipeViewController.swift */; };
 		89E1D7261DB57B380043FE9C /* searchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E1D7251DB57B380043FE9C /* searchViewController.swift */; };
+		89FF8D861DC057A2008BB867 /* loginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FF8D851DC057A2008BB867 /* loginViewController.swift */; };
+		F3703698ACC144164ABA67BA /* Pods_solaRecipes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2C52629C01D0BB8B51AF5C5 /* Pods_solaRecipes.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -53,6 +55,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		833EB5D34C9C99393B946F88 /* Pods-solaRecipes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-solaRecipes.debug.xcconfig"; path = "Pods/Target Support Files/Pods-solaRecipes/Pods-solaRecipes.debug.xcconfig"; sourceTree = "<group>"; };
 		894723FA1DBDDD0300EBB0E5 /* advancedSearchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = advancedSearchTableViewCell.swift; sourceTree = "<group>"; };
 		8957802A1D976B2300D1FD75 /* recipeTitleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = recipeTitleTableViewCell.swift; sourceTree = "<group>"; };
 		8957802C1D976B4900D1FD75 /* recipePicturesCollectionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = recipePicturesCollectionTableViewCell.swift; sourceTree = "<group>"; };
@@ -79,6 +82,9 @@
 		89DCCD4A1D8C785200CC2590 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		89DCCD4C1D8CDAEC00CC2590 /* addRecipeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addRecipeViewController.swift; sourceTree = "<group>"; };
 		89E1D7251DB57B380043FE9C /* searchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = searchViewController.swift; path = ../searchViewController.swift; sourceTree = "<group>"; };
+		89FF8D851DC057A2008BB867 /* loginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = loginViewController.swift; sourceTree = "<group>"; };
+		8EF4510D55EB2386B72C0248 /* Pods-solaRecipes.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-solaRecipes.release.xcconfig"; path = "Pods/Target Support Files/Pods-solaRecipes/Pods-solaRecipes.release.xcconfig"; sourceTree = "<group>"; };
+		D2C52629C01D0BB8B51AF5C5 /* Pods_solaRecipes.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_solaRecipes.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,12 +98,31 @@
 				89DCCD331D8C764600CC2590 /* AWSCore.framework in Frameworks */,
 				89DCCD451D8C773E00CC2590 /* AWSMobileHubHelper.framework in Frameworks */,
 				89DCCD3A1D8C767600CC2590 /* AWSS3.framework in Frameworks */,
+				F3703698ACC144164ABA67BA /* Pods_solaRecipes.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		04F7F396CA8888B99E097318 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				89FF8D7C1DC0568C008BB867 /* frameworks */,
+				D2C52629C01D0BB8B51AF5C5 /* Pods_solaRecipes.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7A3DE7FFC0B64ECCA7262BA3 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				833EB5D34C9C99393B946F88 /* Pods-solaRecipes.debug.xcconfig */,
+				8EF4510D55EB2386B72C0248 /* Pods-solaRecipes.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		8957802E1D982B3600D1FD75 /* addingThings */ = {
 			isa = PBXGroup;
 			children = (
@@ -123,12 +148,11 @@
 				89DCCD4A1D8C785200CC2590 /* libsqlite3.tbd */,
 				89DCCD481D8C784000CC2590 /* libz.tbd */,
 				89DCCD3D1D8C773E00CC2590 /* AmazonAws */,
-				89DCCD391D8C767600CC2590 /* AWSS3.framework */,
-				89DCCD361D8C766000CC2590 /* AWSDynamoDB.framework */,
-				89DCCD321D8C764600CC2590 /* AWSCore.framework */,
 				898697E91D88F17E006EBFF1 /* solaRecipes */,
 				898697E81D88F17E006EBFF1 /* Products */,
 				89DCCD301D8C761800CC2590 /* Sdk */,
+				7A3DE7FFC0B64ECCA7262BA3 /* Pods */,
+				04F7F396CA8888B99E097318 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -146,6 +170,7 @@
 				8957802E1D982B3600D1FD75 /* addingThings */,
 				898697EA1D88F17E006EBFF1 /* AppDelegate.swift */,
 				898697EE1D88F17E006EBFF1 /* Main.storyboard */,
+				89FF8D851DC057A2008BB867 /* loginViewController.swift */,
 				89E1D7251DB57B380043FE9C /* searchViewController.swift */,
 				894723FA1DBDDD0300EBB0E5 /* advancedSearchTableViewCell.swift */,
 				898698021D8908E4006EBFF1 /* homeViewController.swift */,
@@ -186,6 +211,16 @@
 			path = NoSQL;
 			sourceTree = "<group>";
 		};
+		89FF8D7C1DC0568C008BB867 /* frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				89DCCD321D8C764600CC2590 /* AWSCore.framework */,
+				89DCCD361D8C766000CC2590 /* AWSDynamoDB.framework */,
+				89DCCD391D8C767600CC2590 /* AWSS3.framework */,
+			);
+			name = frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -193,11 +228,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 898697F91D88F17E006EBFF1 /* Build configuration list for PBXNativeTarget "solaRecipes" */;
 			buildPhases = (
+				99080C4B2AE02695C623396D /* [CP] Check Pods Manifest.lock */,
 				898697E31D88F17D006EBFF1 /* Sources */,
 				898697E41D88F17D006EBFF1 /* Frameworks */,
 				898697E51D88F17D006EBFF1 /* Resources */,
 				89DCCD351D8C764600CC2590 /* Embed Frameworks */,
 				89DCCD3C1D8C76A800CC2590 /* ShellScript */,
+				0807F520806C3FE3545695AA /* [CP] Embed Pods Frameworks */,
+				6EBAAD4D872C5AB695D9B78B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -258,6 +296,36 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0807F520806C3FE3545695AA /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-solaRecipes/Pods-solaRecipes-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6EBAAD4D872C5AB695D9B78B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-solaRecipes/Pods-solaRecipes-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		89DCCD3C1D8C76A800CC2590 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -270,6 +338,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "bash \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSCore.framework/strip-frameworks.sh\"\n";
+		};
+		99080C4B2AE02695C623396D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -292,6 +375,7 @@
 				894723FB1DBDDD0300EBB0E5 /* advancedSearchTableViewCell.swift in Sources */,
 				898697EB1D88F17E006EBFF1 /* AppDelegate.swift in Sources */,
 				8957802D1D976B4900D1FD75 /* recipePicturesCollectionTableViewCell.swift in Sources */,
+				89FF8D861DC057A2008BB867 /* loginViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,6 +486,7 @@
 		};
 		898697FA1D88F17E006EBFF1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 833EB5D34C9C99393B946F88 /* Pods-solaRecipes.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = C39656PGLG;
@@ -409,6 +494,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/solaRecipes/Sdk/Aws",
 					"$(PROJECT_DIR)/AmazonAws",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = solaRecipes/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -421,6 +507,7 @@
 		};
 		898697FB1D88F17E006EBFF1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8EF4510D55EB2386B72C0248 /* Pods-solaRecipes.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = C39656PGLG;
@@ -428,6 +515,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/solaRecipes/Sdk/Aws",
 					"$(PROJECT_DIR)/AmazonAws",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = solaRecipes/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
