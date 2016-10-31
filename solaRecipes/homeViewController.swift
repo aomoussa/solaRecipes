@@ -193,7 +193,7 @@ class homeViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let userNameLabel = UILabel()
         userNameLabel.frame = CGRect(x: screenWidth*0.3, y: cellHeight*0.05, width: screenWidth*0.7, height: cellHeight*0.1)
-        userNameLabel.text = "Ahmed Moussa"//recies[(indexPath as NSIndexPath).row].recie?._userID
+        userNameLabel.text = recies[(indexPath as NSIndexPath).row].recie?._creatorName
         
         let titleLabel = UILabel()
         titleLabel.frame = CGRect(x: 0, y: screenWidth*0.2, width: screenWidth*0.4, height: cellHeight*0.1)

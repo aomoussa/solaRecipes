@@ -19,6 +19,7 @@
 		898698031D8908E4006EBFF1 /* homeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898698021D8908E4006EBFF1 /* homeViewController.swift */; };
 		89AB835A1DA1919A00902824 /* oven.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB83591DA1919A00902824 /* oven.swift */; };
 		89B5AE451DA0888F006953E1 /* fileTransferHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B5AE441DA0888E006953E1 /* fileTransferHandler.swift */; };
+		89BA08951DC2BA9700897700 /* userSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BA08941DC2BA9700897700 /* userSettingsViewController.swift */; };
 		89DCCD311D8C761800CC2590 /* Sdk in Resources */ = {isa = PBXBuildFile; fileRef = 89DCCD301D8C761800CC2590 /* Sdk */; };
 		89DCCD331D8C764600CC2590 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DCCD321D8C764600CC2590 /* AWSCore.framework */; };
 		89DCCD341D8C764600CC2590 /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 89DCCD321D8C764600CC2590 /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -70,6 +71,7 @@
 		898698021D8908E4006EBFF1 /* homeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = homeViewController.swift; sourceTree = "<group>"; };
 		89AB83591DA1919A00902824 /* oven.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = oven.swift; sourceTree = "<group>"; };
 		89B5AE441DA0888E006953E1 /* fileTransferHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = fileTransferHandler.swift; sourceTree = "<group>"; };
+		89BA08941DC2BA9700897700 /* userSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = userSettingsViewController.swift; sourceTree = "<group>"; };
 		89DCCD301D8C761800CC2590 /* Sdk */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Sdk; path = solaRecipes/Sdk; sourceTree = "<group>"; };
 		89DCCD321D8C764600CC2590 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = solaRecipes/Sdk/Aws/AWSCore.framework; sourceTree = "<group>"; };
 		89DCCD361D8C766000CC2590 /* AWSDynamoDB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSDynamoDB.framework; path = solaRecipes/Sdk/Aws/AWSDynamoDB.framework; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 				8957802E1D982B3600D1FD75 /* addingThings */,
 				898697EA1D88F17E006EBFF1 /* AppDelegate.swift */,
 				898697EE1D88F17E006EBFF1 /* Main.storyboard */,
+				89BA08941DC2BA9700897700 /* userSettingsViewController.swift */,
 				89FF8D851DC057A2008BB867 /* loginViewController.swift */,
 				89E1D7251DB57B380043FE9C /* searchViewController.swift */,
 				894723FA1DBDDD0300EBB0E5 /* advancedSearchTableViewCell.swift */,
@@ -365,6 +368,7 @@
 				8957802B1D976B2300D1FD75 /* recipeTitleTableViewCell.swift in Sources */,
 				89E1D7261DB57B380043FE9C /* searchViewController.swift in Sources */,
 				89DCCD471D8C773E00CC2590 /* Users.swift in Sources */,
+				89BA08951DC2BA9700897700 /* userSettingsViewController.swift in Sources */,
 				89AB835A1DA1919A00902824 /* oven.swift in Sources */,
 				898698031D8908E4006EBFF1 /* homeViewController.swift in Sources */,
 				895780311D982BFC00D1FD75 /* recipeTextInforTableViewCell.swift in Sources */,

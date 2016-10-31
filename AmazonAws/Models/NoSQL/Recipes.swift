@@ -31,7 +31,8 @@ class DBRecipe: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _instructions: String?
     var _numberOfPictures: NSNumber?
     var _temperature: NSNumber?
-    var _userID: String?
+    var _creatorFBID: String?
+    var _creatorName: String?
     
     class func dynamoDBTableName() -> String {
         
@@ -57,7 +58,9 @@ class DBRecipe: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_instructions" : "instructions",
             "_numberOfPictures" : "numberOfPictures",
             "_temperature" : "temperature",
-            "_userID" : "userID",
+            "_creatorFBID" : "creatorFBID",
+            "_creatorName" : "creatorName",
+            
         ]
     }
 }

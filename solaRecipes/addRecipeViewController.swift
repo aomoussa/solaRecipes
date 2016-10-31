@@ -9,6 +9,7 @@
 import UIKit
 import AWSDynamoDB
 import AWSMobileHubHelper
+import FacebookCore
 
 class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextViewDelegate {
     
@@ -21,6 +22,7 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
     var instString = "enter instructions here"
     var pictures = [UIImage]()
     var uploadProgresses = [Float]()
+    
     
     @IBOutlet weak var recipeDataTableView: UITableView!
     
@@ -299,24 +301,11 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         let description = descriptionTextView.text
         let temperature = 100 as NSNumber
         let duration = 60 as NSNumber
-        let userID = AWSIdentityManager.default().identityId!
         let numberOfPictures = pictures.count
-        
-        let newRecipe = recipe(id: id, name: name!, insts: instructions!, desc: description!, temp: temperature, dur: duration, userID: userID, numOfPics: numberOfPictures)
-        
-        print(titleTextView.text)
-        self.uploadRecipe(newRecipe.recie!).continue({
-            (task: AWSTask!) -> AWSTask<AnyObject>! in
-            
-            if (task.error != nil) {
-                print(task.error)
-            } else {
-                NSLog("DynamoDB save succeeded")
-                
-                self.uploadPictures(self.pictures, folderName: (newRecipe.recie?._name)!)
-            }
-            return nil
-        })
+        var newRecipe = recipe(id: id, name: name!, insts: instructions!, desc: description!, temp: temperature, dur: duration, creatorFBID: "1", creatorName: "ana gamed fash5", numOfPics: numberOfPictures)
+        if(AccessToken.current != nil){
+            getFBProfileAndUploadRecipe(recipe: newRecipe, accessToken: AccessToken.current!)
+        }
     }
     func uploadOven(_ ovn: oven) -> AWSTask<AnyObject>! {
         let mapper = AWSDynamoDBObjectMapper.default()
@@ -389,4 +378,42 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         self.tabBarController?.selectedIndex = 0
     }
     //----------- --------------- -------------- ---------- UPLOAD FILES ------------- ----------- ------------- //ends
+    //----------- --------------- -------------- ---------- FACEBOOK GET ------------- ----------- ------------- //starts
+    func getFBProfileAndUploadRecipe(recipe: recipe, accessToken: AccessToken) -> Bool{
+        var whatToReturn = false
+        let req = GraphRequest(graphPath: "me", parameters: ["fields":"name"], accessToken: accessToken, httpMethod: GraphRequestHTTPMethod(rawValue: "GET")!, apiVersion: FacebookCore.GraphAPIVersion.defaultVersion)
+        req.start { (response, result) in
+            switch result {
+            case .success(let value):
+                print(value.dictionaryValue)
+                
+                let creatorFBID = value.dictionaryValue!["id"] as! String //["id"] //(forKey: "id")
+                let creatorName = value.dictionaryValue!["name"] as! String
+                print(creatorFBID)
+                print(creatorName)
+                recipe.recie?._creatorFBID = creatorFBID
+                recipe.recie?._creatorName = creatorName
+                
+                        self.uploadRecipe(recipe.recie!).continue({
+                            (task: AWSTask!) -> AWSTask<AnyObject>! in
+                            
+                            if (task.error != nil) {
+                                print(task.error)
+                            } else {
+                                NSLog("DynamoDB save succeeded")
+                                
+                                self.uploadPictures(self.pictures, folderName: (recipe.recie?._name)!)
+                            }
+                            return nil
+                        })
+
+            //print(value.dictionaryValue)
+            case .failed(let error):
+                print(error)
+                whatToReturn = false
+            }
+        }
+        return whatToReturn
+    }
+    //----------- --------------- -------------- ---------- FACEBOOK GET ------------- ----------- ------------- //ends
 }
