@@ -42,6 +42,7 @@ class loginViewController: UIViewController {
                 print(error)
             case .cancelled:
                 print("User cancelled login.")
+                self.performSegue(withIdentifier: "toTabViews", sender: self)
             case .success(let grantedPermissions, let declinedPermissions, let accessToken):
                 print("Logged in!")
                 self.performSegue(withIdentifier: "toTabViews", sender: self)

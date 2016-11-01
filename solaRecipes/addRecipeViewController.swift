@@ -20,6 +20,7 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
     var titleString = "enter title here"
     var descString = "enter description here"
     var instString = "enter instructions here"
+    var duration = 10
     var pictures = [UIImage]()
     var uploadProgresses = [Float]()
     
@@ -134,6 +135,11 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         }
         view.endEditing(true)
     }
+    func durationChanged(_ sender: UIDatePicker){
+        self.duration = Int(sender.countDownDuration)/60
+        print(self.duration)
+        
+    }
     
     //----------------------------- TABLEVIEW CODE -------------------------------- starts
     
@@ -142,7 +148,7 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return 6
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -159,6 +165,8 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
             
             return makeTitleInputCell("Description")
         case 3:
+            return makeDurationCell()
+        case 4:
             //let cell = tableView.dequeueReusableCellWithIdentifier("textInfoCell") as! recipeTextInforTableViewCell
             return makeTitleInputCell("Instructions")
         default:
@@ -168,6 +176,28 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
             return cell
         }
     }
+    func makeDurationCell() -> UITableViewCell{
+        let screenHeight = self.view.frame.height
+        let cellHeight =  screenHeight/3
+        let screenWidth = self.view.frame.width
+        
+        let cell = UITableViewCell()
+        
+        let durationTitleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: cellHeight*0.2))
+        durationTitleLabel.text = "Duration: "
+        
+        let durationSelector = UIDatePicker(frame: CGRect(x: 0, y: cellHeight*0.2, width: screenWidth, height: cellHeight*0.8))
+        durationSelector.datePickerMode = .countDownTimer
+        
+        durationSelector.addTarget(self, action: #selector(addRecipeViewController.durationChanged(_:)), for: UIControlEvents.valueChanged)
+        
+        
+        cell.addSubview(durationSelector)
+        cell.addSubview(durationTitleLabel)
+        
+        cell.backgroundColor = UIColor.orange
+        return cell
+    }
     func makePicturesCollectionCell() -> UITableViewCell{
         let cell = recipeDataTableView.dequeueReusableCell(withIdentifier: "picturesCollectionCell") as! recipePicturesCollectionTableViewCell
         let screenHeight = self.view.frame.height
@@ -176,6 +206,7 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         
         cell.picturesCollectionView.delegate = self
         cell.picturesCollectionView.dataSource = self
+        cell.picturesCollectionView.backgroundColor = UIColor.orange
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -197,7 +228,7 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         descriptionTextView.delegate = self
         instructionsTextView.delegate = self
         
-        someTextView.backgroundColor = UIColor.purple
+        someTextView.backgroundColor = UIColor.white
         switch(type){
         case "Title":
             cellHeight =  screenHeight/8
@@ -229,7 +260,7 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         typeLabel.text = "\(type): "
         cell.addSubview(typeLabel)
         
-        cell.backgroundColor = UIColor.blue
+        cell.backgroundColor = UIColor.orange
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -242,6 +273,8 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         case 2:
             return screenHeight/5
         case 3:
+            return screenHeight/3
+        case 4:
             return screenHeight/3
         default:
             return screenHeight/8
@@ -300,7 +333,7 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         let instructions = instructionsTextView.text
         let description = descriptionTextView.text
         let temperature = 100 as NSNumber
-        let duration = 60 as NSNumber
+        let duration = self.duration as NSNumber
         let numberOfPictures = pictures.count
         var newRecipe = recipe(id: id, name: name!, insts: instructions!, desc: description!, temp: temperature, dur: duration, creatorFBID: "1", creatorName: "ana gamed fash5", numOfPics: numberOfPictures)
         if(AccessToken.current != nil){
