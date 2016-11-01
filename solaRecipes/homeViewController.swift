@@ -20,6 +20,7 @@ class homeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     var recies = [recipe]()
     var ovens = [oven]()
+    var recipeCreatorPPDownloadedAtIndex = [Bool]()
     
     private var manager: AWSUserFileManager!
     
@@ -89,6 +90,7 @@ class homeViewController: UIViewController, UITableViewDelegate, UITableViewData
                     //NSLog(item.M!.stringValue)
                     let newRecie = recipe(recip: item)
                     self.recies.append(newRecie)
+                    self.recipeCreatorPPDownloadedAtIndex.append(false)
                     DispatchQueue.main.async(execute: {
                         self.recipeTableView.reloadData()
                         i = i + 1
@@ -189,7 +191,7 @@ class homeViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let userPicButton = UIButton()
         userPicButton.frame = CGRect(x: 0, y: 0, width: screenWidth*0.2, height: screenWidth*0.2)
-        userPicButton.setBackgroundImage(UIImage(named: "plus.jpg"), for: UIControlState.normal)
+        userPicButton.setBackgroundImage(recies[(indexPath as NSIndexPath).row].creatorPP , for: UIControlState.normal)
         
         let userNameLabel = UILabel()
         userNameLabel.frame = CGRect(x: screenWidth*0.3, y: cellHeight*0.05, width: screenWidth*0.7, height: cellHeight*0.1)
@@ -296,6 +298,13 @@ class homeViewController: UIViewController, UITableViewDelegate, UITableViewData
             recies[i].picures.append(UIImage(named: "plus.jpg")!)
             //S3DownloadPicture(recipeIndex: i)
             loadContentsAtDirectory(prefix: "public/\((recies[i].recie?._name!)!)/", i: i)
+            if(!recipeCreatorPPDownloadedAtIndex[i]){
+                
+                
+                let FBID = recies[i].recie?._creatorFBID!
+                getFBProfilePicForIndex(userFBID: FBID! as String, i: i)
+                recipeCreatorPPDownloadedAtIndex[i] = true
+            }
         }
         
     }
@@ -424,6 +433,28 @@ class homeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }
             }
             })
+    }
+    func getFBProfilePicForIndex(userFBID: String, i: Int){
+        let picURL = URL(string: "https://graph.facebook.com/\(userFBID)/picture?type=large")
+        print(picURL)
+        
+        print("Download Started")
+        getDataFromUrl(url: picURL!) { (data, response, error)  in
+            guard let data = data, error == nil else { return }
+            print(response?.suggestedFilename ?? picURL?.lastPathComponent)
+            print("Download Finished")
+            DispatchQueue.main.async() { () -> Void in
+                let image = UIImage(data: data)
+                self.recies[i].creatorPP = image!
+            }
+        }
+        
+    }
+    func getDataFromUrl(url: URL, completion: @escaping (_ data: Data?, _  response: URLResponse?, _ error: Error?) -> Void) {
+        URLSession.shared.dataTask(with: url) {
+            (data, response, error) in
+            completion(data, response, error)
+            }.resume()
     }
     /*
      // MARK: - Navigation

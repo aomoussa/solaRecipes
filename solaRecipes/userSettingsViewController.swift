@@ -78,46 +78,34 @@ class userSettingsViewController: UIViewController {
         }
     }
     func getFBProfilePic(userFBID: String){
-        /*
-        let pictureRequest = GraphRequest(graphPath: "me/picture?type=normal&redirect=false")
-        pictureRequest.start{
-            (connection, result) in
-            
-            if result != nil {
-                
-                let imageData = result //.objectForKey("data") as! NSDictionary
-                let dataURL = data.objectForKey("url") as! String
-                let pictureURL = NSURL(string: dataURL)
-                imageData = NSData(contentsOfURL: pictureURL!)
-                let image = UIImage(data: imageData!)
-                
-            }
-        }*/
-    }
-        /*
-        let picURL = URL(fileURLWithPath: "https://graph.facebook.com/\(userFBID)/picture?type=large")
-        //let picURLRequest = URLRequest(url: picURL)
-        //let session = URLSession.shared
-        let task = URLSession.shared.dataTask(with: picURL) { (Data, URLResponse, Error) in
-            if(Error == nil){
-                let image = UIImage(data: Data!)
+        let ahmedsPicURL = URL(string: "https://graph.facebook.com/10155692326063868/picture?type=large")
+        let picURL = URL(string: "https://graph.facebook.com/\(userFBID)/picture?type=large")
+        print(picURL)
+       
+        print("Download Started")
+        getDataFromUrl(url: picURL!) { (data, response, error)  in
+            guard let data = data, error == nil else { return }
+            print(response?.suggestedFilename ?? picURL?.lastPathComponent)
+            print("Download Finished")
+            DispatchQueue.main.async() { () -> Void in
+                let image = UIImage(data: data)
+                self.profilePictureButton.contentMode = .scaleAspectFill
                 self.profilePictureButton.setImage(image, for: UIControlState.normal)
                 self.activityInd.alpha = 0
-           }
-            else{
-                print(Error)
+                let imageView = UIImageView(image: image)
+                imageView.frame = self.profilePictureButton.frame
+                imageView.contentMode = .scaleAspectFit
+                self.view.addSubview(imageView)
             }
         }
         
-        
-        
-        //NSURLConnection.sendAsynchronousRequest(picURLRequest, queue: OperationQueue.mainQueue) { (response: URLResponse!, data: Data!, error: Error!) -> Void in
-            
-            // Display the image
-            //let image = UIImage(data: data)
-            //self.profilePic.image = image
-        //}
-    }*/
+    }
+    func getDataFromUrl(url: URL, completion: @escaping (_ data: Data?, _  response: URLResponse?, _ error: Error?) -> Void) {
+        URLSession.shared.dataTask(with: url) {
+            (data, response, error) in
+            completion(data, response, error)
+            }.resume()
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

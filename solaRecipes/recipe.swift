@@ -23,7 +23,7 @@ import UIKit
 import AWSDynamoDB
 
 class recipe {
-    
+    var creatorPP = UIImage(named: "plus.jpg")
     var picures = [UIImage]()
     var recie = DBRecipe()
     
