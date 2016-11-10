@@ -282,7 +282,7 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         view.endEditing(true)
-        if((indexPath as NSIndexPath).row == 4){
+        if((indexPath as NSIndexPath).row == 5){
             print("submit recipe clicked")
             
             switch(getSegmentedControlState(sc: segmentedControl)){
