@@ -337,7 +337,9 @@ class addRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         let numberOfPictures = pictures.count
         var newRecipe = recipe(id: id, name: name!, insts: instructions!, desc: description!, temp: temperature, dur: duration, creatorFBID: "1", creatorName: "ana gamed fash5", numOfPics: numberOfPictures)
         if(AccessToken.current != nil){
-            getFBProfileAndUploadRecipe(recipe: newRecipe, accessToken: AccessToken.current!)
+            glblUploadHandler.getFBProfileAndUploadRecipeAndPics(recipe: newRecipe, pictures: self.pictures, accessToken: AccessToken.current!)
+            //getFBProfileAndUploadRecipe(recipe: newRecipe, accessToken: AccessToken.current!)
+            self.tabBarController?.selectedIndex = 0
         }
     }
     func uploadOven(_ ovn: oven) -> AWSTask<AnyObject>! {
